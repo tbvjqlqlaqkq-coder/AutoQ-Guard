@@ -1,12 +1,5 @@
 # AutoQ-Guard
 
-[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-대시보드_실행-FF6A3D?style=for-the-badge)](https://tbvjqlqlaqkq-coder.github.io/AutoQ-Guard/demo/)
-
-**[▶ AutoQ-Guard 공개 대시보드 바로 실행](https://tbvjqlqlaqkq-coder.github.io/AutoQ-Guard/demo/)**  
-로그인 없이 위험 분석·LOT 검색·손익 ROI 시뮬레이션을 체험할 수 있습니다. 모든 표시값은 합성데이터입니다.
-
-
-
 ### 자동차 부품 LOT부터 VIN·보증수리·리콜 위험까지 연결하는 품질 조기대응 PoC
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
@@ -181,3 +174,8 @@ AutoQ-Guard/
 **개인 PoC와 재현성 검증은 완료했습니다. 기업 내부 데이터 실증과 운영 승인은 남아 있습니다.**
 
 이 프로젝트의 목적은 “리콜을 정확히 예언했다”고 주장하는 것이 아니라, 현장에서 발견한 품질 문제를 데이터 구조·조기경보·영향범위·경제성 판단으로 연결하고 기업 실증이 가능한 형태로 만드는 것입니다.
+
+
+## 시스템 아키텍처
+
+[전체 시스템 구조·역할별 권한·기업 적용 경계 보기](./docs/ARCHITECTURE.md)
