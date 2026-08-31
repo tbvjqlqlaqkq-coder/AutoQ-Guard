@@ -1,5 +1,12 @@
 # AutoQ-Guard
 
+[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-대시보드_실행-FF6A3D?style=for-the-badge)](https://tbvjqlqlaqkq-coder.github.io/AutoQ-Guard/demo/)
+
+**[▶ AutoQ-Guard 공개 대시보드 바로 실행](https://tbvjqlqlaqkq-coder.github.io/AutoQ-Guard/demo/)**  
+로그인 없이 위험 분석·LOT 검색·손익 ROI 시뮬레이션을 체험할 수 있습니다. 모든 표시값은 합성데이터입니다.
+
+
+
 ### 자동차 부품 LOT부터 VIN·보증수리·리콜 위험까지 연결하는 품질 조기대응 PoC
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
