@@ -1,0 +1,44 @@
+{
+  "company_profile": "DEMO_COMPANY_V1",
+  "tables": {
+    "part_lot.csv": {
+      "source_file": "협력사부품입고.csv",
+      "columns": {
+        "lot_id": "부품LOT번호",
+        "supplier_id": "협력사코드",
+        "part_number": "부품번호",
+        "safety_class": "안전등급",
+        "received_at": "입고일시",
+        "quantity": "입고수량"
+      },
+      "transforms": {"lot_id": "upper", "supplier_id": "upper", "part_number": "upper", "safety_class": "upper", "received_at": "datetime", "quantity": "integer"}
+    },
+    "process_inspection.csv": {
+      "source_file": "공정검사.csv",
+      "columns": {
+        "inspection_id": "검사번호",
+        "lot_id": "부품LOT번호",
+        "process_id": "공정코드",
+        "measured_at": "검사일시",
+        "process_z": "공정편차Z",
+        "recheck_rate": "재검률"
+      },
+      "transforms": {"inspection_id": "upper", "lot_id": "upper", "process_id": "upper", "measured_at": "datetime", "process_z": "number", "recheck_rate": "percent_to_rate"}
+    },
+    "vehicle_build.csv": {
+      "source_file": "차량조립이력.csv",
+      "columns": {"vin": "차대번호", "lot_id": "장착LOT", "model": "차종", "production_at": "생산일시", "shipment_status": "출고상태"},
+      "transforms": {"vin": "upper", "lot_id": "upper", "production_at": "datetime", "shipment_status": "upper"}
+    },
+    "warranty_claim.csv": {
+      "source_file": "보증수리.csv",
+      "columns": {"claim_id": "수리접수번호", "vin": "차대번호", "claim_at": "수리일자", "failure_code": "고장코드", "repair_cost_krw": "총수리비"},
+      "transforms": {"claim_id": "upper", "vin": "upper", "claim_at": "datetime", "failure_code": "upper", "repair_cost_krw": "number"}
+    },
+    "cost_master.csv": {
+      "source_file": "부품비용기준.csv",
+      "columns": {"part_number": "부품번호", "early_action_cost_krw": "출고전조치비", "field_repair_cost_krw": "출고후수리비", "customer_compensation_krw": "고객보상비"},
+      "transforms": {"part_number": "upper", "early_action_cost_krw": "number", "field_repair_cost_krw": "number", "customer_compensation_krw": "number"}
+    }
+  }
+}

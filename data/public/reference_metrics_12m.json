@@ -1,0 +1,11 @@
+{
+  "horizon_months": 12,
+  "recall_events": 738,
+  "detected_recalls": 152,
+  "recall_detection_rate": 0.20596205962059622,
+  "alert_episodes": 2125,
+  "true_alerts": 172,
+  "false_alerts": 1953,
+  "alert_precision": 0.08094117647058824,
+  "median_lead_months": 4.50065703022339
+}

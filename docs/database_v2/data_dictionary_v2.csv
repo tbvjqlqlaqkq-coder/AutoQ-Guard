@@ -1,0 +1,32 @@
+table,column,type,required,key,description,source_example
+data_load_batch,batch_id,text,Y,PK,적재 작업 고유키,ERP_20260805_01
+data_load_batch,source_system,text,Y,,원천 시스템명,MES
+data_load_batch,source_hash,text,Y,,원천 파일 SHA-256 해시,64자리 해시
+supplier,supplier_id,text,Y,PK,협력사 가명 식별자,SUP001
+part,part_number,text,Y,PK,부품번호,ABS-HECU-01
+part,safety_class,text,Y,,안전 영향 등급,SAFETY
+part_lot,lot_id,text,Y,PK,협력사 부품 LOT 식별자,LOT20260805001
+part_lot,supplier_id,text,Y,FK,협력사 식별자,SUP001
+part_lot,part_number,text,Y,FK,부품번호,ABS-HECU-01
+part_lot,received_at,timestamptz,Y,,입고 시각,2026-08-05T08:30:00+09:00
+process_inspection,inspection_id,text,Y,PK,검사 고유키,INSP001
+process_inspection,lot_id,text,Y,FK,검사 대상 LOT,LOT20260805001
+process_inspection,process_id,text,Y,FK,공정 식별자,P10
+process_inspection,process_z,numeric,Y,,표준화 공정 편차,2.84
+process_inspection,recheck_rate,numeric,Y,,재검률 0~1,0.035
+vehicle,vehicle_key,text,Y,PK,가명화 차량키,VH_001
+vehicle,model,text,Y,,차종 코드,MODEL_A
+vehicle,production_at,timestamptz,Y,,생산 시각,2026-08-05T10:10:00+09:00
+vehicle,shipment_status,text,Y,,출고 상태,HOLD
+vehicle_part_installation,vehicle_key,text,Y,PK/FK,가명 차량키,VH_001
+vehicle_part_installation,lot_id,text,Y,PK/FK,장착 부품 LOT,LOT20260805001
+warranty_claim,claim_id,text,Y,PK,보증수리 고유키,CLM001
+warranty_claim,vehicle_key,text,Y,FK,가명 차량키,VH_001
+warranty_claim,failure_code,text,Y,,고장 코드,C1234
+warranty_claim,repair_cost_krw,numeric,Y,,실제 수리비 원화,450000
+risk_assessment,assessment_id,bigint,Y,PK,위험평가 실행 고유키,101
+risk_assessment,model_version,text,Y,,규칙 또는 모델 버전,rule_v1
+risk_assessment,risk_score,numeric,Y,,0~1 위험점수,0.82
+risk_assessment,risk_level,text,Y,,LOW/MEDIUM/HIGH/CRITICAL,HIGH
+risk_assessment,risk_reasons,jsonb,Y,,위험 근거 목록,"[""공정편차"",""재검률""]"
+risk_assessment,estimated_direct_roi,numeric,N,,가정 또는 실측 직접 ROI,0.34

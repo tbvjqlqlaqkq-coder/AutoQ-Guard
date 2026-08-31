@@ -1,0 +1,2 @@
+inspection_id,lot_id,process_id,measured_at,process_z,recheck_rate
+INSP-DEMO-001,LOT-DEMO-001,ASSEMBLY-01,2026-01-11 09:10:00,2.35,0.08

@@ -1,0 +1,8 @@
+{
+  "complaints": 50441,
+  "recall_campaign_records": 738,
+  "investigation_records": 23,
+  "groups": 2248,
+  "period": "2020-01 to 2026-06",
+  "rule": "C3>=5 and (P3=0 or C3>=2*P3), or S3>=2, or I3>=1"
+}

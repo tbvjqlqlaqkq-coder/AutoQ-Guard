@@ -1,0 +1,2 @@
+lot_id,supplier_id,part_number,safety_class,received_at,quantity
+LOT-DEMO-001,SUP-DEMO-01,HECU-DEMO,SAFETY,2026-01-10 08:30:00,80

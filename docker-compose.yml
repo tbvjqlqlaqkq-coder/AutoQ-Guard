@@ -1,0 +1,12 @@
+services:
+  autoq-guard:
+    build: .
+    ports:
+      - "8765:8765"
+    env_file:
+      - .env
+    volumes:
+      - autoq_results:/app/results
+    restart: unless-stopped
+volumes:
+  autoq_results:

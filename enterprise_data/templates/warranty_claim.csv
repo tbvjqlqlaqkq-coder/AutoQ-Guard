@@ -1,0 +1,2 @@
+claim_id,vin,claim_at,failure_code,repair_cost_krw
+CLAIM-DEMO-001,KMHDEMA1234567890,2026-02-15,ABS-WARNING,485000

@@ -1,0 +1,18 @@
+{
+  "rule_version": "ENTERPRISE-PILOT-1.0",
+  "high_score_min": 55,
+  "watch_score_min": 25,
+  "minimum_records_for_decision": {
+    "lots": 10,
+    "vehicle_links": 100,
+    "warranty_claims": 10
+  },
+  "fixed_program_cost_krw": 20000000,
+  "intervention_success_rate": {
+    "SAFETY": 0.65,
+    "POWERTRAIN": 0.55,
+    "CONVENIENCE": 0.45,
+    "SOFTWARE": 0.75
+  },
+  "warning": "파일의 성공률과 비용은 기업 실측값으로 교체한 뒤 승인해야 합니다"
+}

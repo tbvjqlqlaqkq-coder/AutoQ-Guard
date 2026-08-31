@@ -1,0 +1,21 @@
+{
+  "rule_version": "G3-LOCKED-1.0",
+  "split_method": "production_date ascending, first 70% reference, last 30% blind test",
+  "normal_reference": "training_all_lots_total_signals / training_all_lots_total_vehicles",
+  "minimum_field_signals": 3,
+  "minimum_rate_ratio": 1.5,
+  "default_vehicle_count": 80,
+  "enterprise_candidate": {
+    "enabled": true,
+    "requires_baseline_alert": true,
+    "process_z_min": 2.0,
+    "recheck_rate_min": 0.07,
+    "condition": "process_z >= min OR recheck_rate >= min"
+  },
+  "gates": {
+    "recall_min": 0.7,
+    "precision_min": 0.2,
+    "false_alarm_rate_max": 0.1
+  },
+  "warning": "G3 시작 후 이 파일을 수정하면 새 규칙 버전으로 다시 승인해야 합니다."
+}

@@ -1,0 +1,134 @@
+{
+  "seed": 20260730,
+  "runs_per_design": 20000,
+  "roi_gate": 0.1,
+  "uncertainty": {
+    "tp_vehicles": "triangular 75%~125%, mode=design",
+    "intervention_success_rate": "triangular 35%~70%, mode=50%",
+    "field_cost": "triangular 400k~600k, mode=485k",
+    "early_cost": "triangular 180k~260k, mode=210k",
+    "fixed_cost": "triangular 90%~110%, mode=design",
+    "false_alert_vehicles": "triangular 0~50% of TP mode, mode=10%"
+  },
+  "designs": [
+    {
+      "name": "A_현행소규모",
+      "tp_vehicle_mode": 240,
+      "fixed_cost": 50000000,
+      "success_fee_rate": 0.0,
+      "success_fee_cap": 0,
+      "description": "현재 240대 규모와 PoC·데이터비 5천만원 유지",
+      "deterministic": {
+        "prevented": 120.0,
+        "avoided": 58200000.0,
+        "early": 25200000.0,
+        "false_cost": 0,
+        "inventory": 2400000,
+        "fixed": 50000000,
+        "success_fee": 0.0,
+        "total": 77600000.0,
+        "net": -19400000.0,
+        "roi": -0.25
+      },
+      "monte_carlo": {
+        "expected_net": -19783853.809719767,
+        "median_net": -20405886.387376428,
+        "p10_net": -30012105.031249058,
+        "p90_net": -8620757.879066521,
+        "median_roi": -0.25245799513309375,
+        "probability_positive_net": 0.016599999999999948,
+        "probability_roi_gate": 0.00185
+      }
+    },
+    {
+      "name": "B_비용절감형",
+      "tp_vehicle_mode": 240,
+      "fixed_cost": 20000000,
+      "success_fee_rate": 0.0,
+      "success_fee_cap": 0,
+      "description": "기존 분석도구 재사용·부품 1종·고정 산출물로 비용 2천만원 제한",
+      "deterministic": {
+        "prevented": 120.0,
+        "avoided": 58200000.0,
+        "early": 25200000.0,
+        "false_cost": 0,
+        "inventory": 2400000,
+        "fixed": 20000000,
+        "success_fee": 0.0,
+        "total": 47600000.0,
+        "net": 10600000.0,
+        "roi": 0.22268907563025211
+      },
+      "monte_carlo": {
+        "expected_net": 10150549.715202097,
+        "median_net": 9481888.06739084,
+        "p10_net": 223321.73648395404,
+        "p90_net": 21074778.668731786,
+        "median_roi": 0.18621300704666038,
+        "probability_positive_net": 0.9062,
+        "probability_roi_gate": 0.72175
+      }
+    },
+    {
+      "name": "C_대상확대형",
+      "tp_vehicle_mode": 480,
+      "fixed_cost": 30000000,
+      "success_fee_rate": 0.0,
+      "success_fee_cap": 0,
+      "description": "24~36개월 또는 복수 생산기간으로 TP 대상 480대 확보",
+      "deterministic": {
+        "prevented": 240.0,
+        "avoided": 116400000.0,
+        "early": 50400000.0,
+        "false_cost": 0,
+        "inventory": 4800000,
+        "fixed": 30000000,
+        "success_fee": 0.0,
+        "total": 85200000.0,
+        "net": 31200000.0,
+        "roi": 0.36619718309859156
+      },
+      "monte_carlo": {
+        "expected_net": 30474428.24853702,
+        "median_net": 29001125.62594956,
+        "p10_net": 10735840.880312292,
+        "p90_net": 52018457.8407501,
+        "median_roi": 0.3172167616340974,
+        "probability_positive_net": 0.9878,
+        "probability_roi_gate": 0.92765
+      }
+    },
+    {
+      "name": "D_단계지급형",
+      "tp_vehicle_mode": 480,
+      "fixed_cost": 20000000,
+      "success_fee_rate": 0.1,
+      "success_fee_cap": 15000000,
+      "description": "착수·데이터비 2천만원 + 검증된 회피손실 10% 성과금(최대 1천5백만원)",
+      "deterministic": {
+        "prevented": 240.0,
+        "avoided": 116400000.0,
+        "early": 50400000.0,
+        "false_cost": 0,
+        "inventory": 4800000,
+        "fixed": 20000000,
+        "success_fee": 11640000.0,
+        "total": 86840000.0,
+        "net": 29560000.0,
+        "roi": 0.3403961308152925
+      },
+      "monte_carlo": {
+        "expected_net": 28235147.175670505,
+        "median_net": 26826214.73327341,
+        "p10_net": 11007987.611375425,
+        "p90_net": 47269431.64483656,
+        "median_roi": 0.28551317294924256,
+        "probability_positive_net": 0.99305,
+        "probability_roi_gate": 0.93645
+      }
+    }
+  ],
+  "recommended": "D_단계지급형",
+  "selection_rule": "ROI≥10% 확률 70% 이상, P10 순편익 양수 중 확률과 P10 최대",
+  "warning": "합성 G3 규모와 가정분포 기반이며 실제 기업 계약효과가 아님"
+}

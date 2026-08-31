@@ -1,0 +1,9 @@
+.git
+.env
+results
+__pycache__
+*.pyc
+*.db
+*.log
+*.zip
+presentation

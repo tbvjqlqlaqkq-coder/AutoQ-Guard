@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: autoq-guard-postgres
+    environment:
+      POSTGRES_DB: autoq_guard
+      POSTGRES_USER: autoq_guard
+      POSTGRES_PASSWORD: local_poc_only
+    ports:
+      - "54329:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U autoq_guard -d autoq_guard"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    volumes:
+      - autoq_guard_pgdata:/var/lib/postgresql/data
+      - ./postgresql_schema_v2.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+volumes:
+  autoq_guard_pgdata:
