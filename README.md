@@ -168,6 +168,7 @@ AutoQ-Guard/
 - [PostgreSQL 대량시험 결과](docs/database_v2/POSTGRESQL_BULK_TEST_REPORT.md)
 - [모델 검증 보고서](docs/model_validation/MODEL_VALIDATION_REPORT.md)
 - [공개 저장소 구성 설명](docs/GITHUB_PUBLIC_RELEASE.md)
+- [핵심 소스코드 리뷰 가이드](docs/SOURCE_CODE_REVIEW_GUIDE.md)
 
 ## 프로젝트 상태
 
