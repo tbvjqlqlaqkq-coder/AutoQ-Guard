@@ -30,6 +30,8 @@
     @media(max-width:850px){header{padding-bottom:75px}.hero,.grid,.analytics-grid,.roi-layout,.admin-grid{grid-template-columns:1fr}.hero{gap:25px}.metrics{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr}.step:not(:last-child):after{display:none}.controls,.upload{grid-template-columns:1fr}.brand>span{display:none}.view-nav{overflow:auto}.view-nav button{min-width:115px}.donut-box{grid-template-columns:1fr}.waterfall{height:200px}}@media(max-width:480px){.metrics{grid-template-columns:1fr}.hero h1{font-size:33px}.bar-row{grid-template-columns:95px 1fr 58px}.notice{align-items:flex-start;flex-wrap:wrap}.notice .notice-line{display:none}.sim-result{grid-template-columns:1fr}}
     .login-card{width:min(460px,100%)}.privacy-notice{margin-top:12px;padding:11px 12px;border-radius:10px;background:#f4f7fa;color:var(--sub);font-size:11px;line-height:1.55}.privacy-notice b{display:block;color:var(--ink);margin-bottom:4px}
     .public-demo{display:flex;justify-content:center;gap:9px;align-items:center;flex-wrap:wrap;padding:10px 18px;background:#fff7ed;border-bottom:1px solid #fed7aa;color:#9a3412;font-size:12px;font-weight:700}.public-demo span{margin-right:5px}.public-demo a{display:inline-flex;align-items:center;height:30px;padding:0 11px;border:1px solid #d8e2eb;border-radius:8px;background:#fff;color:#174b73;text-decoration:none;box-shadow:0 3px 9px rgba(16,32,51,.06)}.public-demo a:hover{border-color:#8eb4d2;background:#f5faff;transform:translateY(-1px)}.public-demo a.primary{border-color:#173b5c;background:#173b5c;color:#fff}.public-demo code{padding:2px 6px;border-radius:5px;background:#ffedd5}.login-gate,#dataNav,#adminNav,#logoutButton{display:none!important}
+    .intro-lead{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.intro-story{background:linear-gradient(135deg,#0b1d31,#183f5e);color:#fff}.intro-story h2{font-size:27px;line-height:1.35}.intro-story p{color:#c8d7e4;line-height:1.75;font-size:13px}.intro-quote{margin-top:22px;padding:15px 17px;border-left:3px solid var(--orange);border-radius:0 10px 10px 0;background:rgba(255,255,255,.07);font-size:12px;line-height:1.7}.intro-target{display:grid;gap:11px}.intro-target div{padding:15px;border:1px solid var(--line);border-radius:12px;background:#fbfcfe}.intro-target small{display:block;color:var(--orange);font-size:9px;font-weight:800;letter-spacing:.1em}.intro-target b{display:block;margin:7px 0 4px;font-size:13px}.intro-target span{color:var(--sub);font-size:11px;line-height:1.5}.intro-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}.intro-flow div{position:relative;min-height:118px;padding:15px 13px;border:1px solid var(--line);border-radius:12px;background:#fbfcfe}.intro-flow div:not(:last-child):after{content:"→";position:absolute;right:-13px;top:44px;z-index:2;color:#8da0b3;font-weight:900}.intro-flow small{color:var(--blue);font-weight:800}.intro-flow b{display:block;margin:9px 0 6px;font-size:12px}.intro-flow span{color:var(--sub);font-size:10px;line-height:1.5}.proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.proof-list{display:grid;gap:10px}.proof-item{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fbfcfe}.proof-item i{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--mint);color:var(--green);font-style:normal;font-weight:900}.proof-item.warn i{background:var(--sand);color:var(--orange)}.proof-item b{font-size:12px}.proof-item p{margin:4px 0 0;color:var(--sub);font-size:10px;line-height:1.5}.intro-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.intro-actions a{display:inline-flex;align-items:center;height:38px;padding:0 13px;border-radius:9px;background:#173b5c;color:#fff;text-decoration:none;font-size:11px;font-weight:800}.intro-actions a.secondary{background:#fff;color:#174b73;border:1px solid #bcd0df}.intro-actions a:hover{transform:translateY(-1px)}
+    @media(max-width:850px){.intro-lead,.proof-grid{grid-template-columns:1fr}.intro-flow{grid-template-columns:1fr}.intro-flow div:not(:last-child):after{display:none}}
   </style>
 </head>
 <body>
@@ -46,9 +48,61 @@
   </header>
   <main>
     <nav class="view-nav" aria-label="대시보드 화면 전환">
-      <button class="active" data-view="overview">종합 현황</button><button data-view="risk">위험 분석</button><button data-view="economics">손익·ROI</button><button data-view="data" id="dataNav">데이터 반입</button><button data-view="search">상세 검색</button><button data-view="admin" id="adminNav" hidden>관리자</button>
+      <button class="active" data-view="about">프로젝트 소개</button><button data-view="overview">종합 현황</button><button data-view="risk">위험 분석</button><button data-view="economics">손익·ROI</button><button data-view="data" id="dataNav">데이터 반입</button><button data-view="search">상세 검색</button><button data-view="admin" id="adminNav" hidden>관리자</button>
     </nav>
-    <div class="view active" id="view-overview">
+    <div class="view active" id="view-about">
+      <section class="intro-lead">
+        <article class="panel intro-story">
+          <span class="eyebrow">PROJECT ORIGIN</span>
+          <h2>생산현장의 작은 이상을<br>출고 후 큰 손실이 되기 전에 찾습니다.</h2>
+          <p>AutoQ-Guard는 부품 LOT, 공정검사, 차량 장착이력, 보증수리·공개 리콜 신호를 한 흐름으로 연결합니다. 위험 LOT을 조기에 찾고, 해당 부품이 장착된 VIN과 예상 손익까지 보여줘 품질담당자의 사전 판단을 돕는 개인 PoC입니다.</p>
+          <div class="intro-quote">기아 AutoLand 광주공장에서 차량 문·유리·배선 모듈을 조립하며, 작은 확인 하나가 다음 공정과 출고 품질로 이어진다는 경험에서 시작했습니다.</div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><div><h2>이 프로젝트가 답하는 질문</h2><p>위험점수에서 멈추지 않고 실제 대응까지 연결합니다.</p></div><span class="chip">PoC</span></div>
+          <div class="intro-target">
+            <div><small>EARLY SIGNAL</small><b>어떤 LOT이 위험한가?</b><span>공정 편차·재검률·보증수리·안전등급으로 검토 우선순위를 제시합니다.</span></div>
+            <div><small>VIN TRACE</small><b>어느 차량이 영향을 받는가?</b><span>LOT–VIN 장착이력으로 영향 차량 범위를 좁힙니다.</span></div>
+            <div><small>BUSINESS VALUE</small><b>지금 대응하면 이익이 있는가?</b><span>회피손실·조기조치비·순편익·ROI를 같은 화면에서 비교합니다.</span></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel" style="margin-top:18px">
+        <div class="panel-head"><div><h2>데이터가 판단으로 바뀌는 과정</h2><p>기업 원본 데이터가 들어왔을 때 재사용할 수 있는 표준 흐름입니다.</p></div><span class="chip">5 STEPS</span></div>
+        <div class="intro-flow">
+          <div><small>01 INPUT</small><b>데이터 반입</b><span>부품 LOT·공정검사·장착이력·보증수리·비용 기준</span></div>
+          <div><small>02 QUALITY GATE</small><b>오류 차단</b><span>필수값·중복·형식·LOT–VIN 참조관계 검사</span></div>
+          <div><small>03 RISK</small><b>위험 LOT 산출</b><span>고정 경보규칙과 부품 안전 중요도 반영</span></div>
+          <div><small>04 TRACE</small><b>영향 VIN 특정</b><span>문제 LOT이 장착된 차량과 출고 상태 연결</span></div>
+          <div><small>05 DECISION</small><b>손익·대응 판단</b><span>출고보류·점검·OTA·재고와 예상 ROI 비교</span></div>
+        </div>
+      </section>
+
+      <section class="proof-grid">
+        <article class="panel">
+          <div class="panel-head"><div><h2>현재까지 검증한 것</h2><p>재현 가능한 코드와 시험으로 확인했습니다.</p></div><span class="chip">VERIFIED</span></div>
+          <div class="proof-list">
+            <div class="proof-item"><i>✓</i><div><b>LOT–검사–VIN–클레임 연결</b><p>데이터 관계와 위험·영향 차량 검색 흐름 구현</p></div></div>
+            <div class="proof-item"><i>✓</i><div><b>PostgreSQL 12개 업무 테이블</b><p>트랜잭션·롤백·인덱스 조회와 대량 적재 시험</p></div></div>
+            <div class="proof-item"><i>✓</i><div><b>20명 동시조회 실패 0건</b><p>로컬 Docker 조건에서 15초 동안 442,833건 처리</p></div></div>
+            <div class="proof-item"><i>✓</i><div><b>자동검사 26개 통과</b><p>정상 흐름과 오류·보안·권한·SQL 입력 시험</p></div></div>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><div><h2>기업 데이터로 확인할 것</h2><p>아직 확정값으로 주장하지 않는 범위입니다.</p></div><span class="chip" style="background:var(--sand);border-color:#f4d9c9;color:#b85a25">REMAINING</span></div>
+          <div class="proof-list">
+            <div class="proof-item warn"><i>!</i><div><b>실제 탐지율과 정밀도</b><p>기업 과거 데이터로 시간순 백테스트 필요</p></div></div>
+            <div class="proof-item warn"><i>!</i><div><b>오탐으로 인한 생산비용</b><p>출고보류·재검·재고 비용을 기업 기준으로 산정</p></div></div>
+            <div class="proof-item warn"><i>!</i><div><b>실제 예방 차량과 확정 ROI</b><p>내부 비용·성공률을 반영한 제한된 파일럿 필요</p></div></div>
+            <div class="proof-item warn"><i>!</i><div><b>운영 보안 연동</b><p>SSO·MFA·KMS·망 분리·보안관제·백업복구 추가</p></div></div>
+          </div>
+          <div class="intro-actions"><a href="https://github.com/tbvjqlqlaqkq-coder/AutoQ-Guard/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noreferrer">전체 아키텍처 보기</a><a class="secondary" href="https://github.com/tbvjqlqlaqkq-coder/AutoQ-Guard/blob/main/docs/SOURCE_CODE_REVIEW_GUIDE.md" target="_blank" rel="noreferrer">코드 구조 보기</a></div>
+        </article>
+      </section>
+    </div>
+
+    <div class="view" id="view-overview">
     <section class="notice"><strong>검증된 범위</strong><span class="notice-line"></span><span>위험신호를 찾는 구조는 검증했습니다. 실제 예방률과 ROI는 기업 데이터로 확인해야 합니다.</span></section>
     <section class="metrics">
       <article class="metric"><span class="kpi-code">LOT ANALYZED</span><span>분석 LOT</span><b id="lots">2,000</b><small>부품 생산단위</small></article>
