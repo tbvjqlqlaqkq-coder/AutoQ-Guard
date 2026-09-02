@@ -12,9 +12,10 @@ from pathlib import Path
 from enterprise_database import build_database, search_database
 from enterprise_import import import_and_validate
 from enterprise_risk_analyzer import analyze
+from public_data_adapter import adapt_public_data
 
 
-STAGES = ["IMPORT_VALIDATE", "RISK_ANALYSIS", "DATABASE_BUILD", "SMOKE_SEARCH"]
+STAGES = ["PUBLIC_EVIDENCE", "IMPORT_VALIDATE", "RISK_ANALYSIS", "DATABASE_BUILD", "SMOKE_SEARCH"]
 
 
 def _write_summary(path: Path, summary: dict) -> None:
@@ -22,7 +23,8 @@ def _write_summary(path: Path, summary: dict) -> None:
     path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8-sig")
 
 
-def run_pipeline(raw_dir: Path, mapping_file: Path, rules_file: Path, output_root: Path) -> dict:
+def run_pipeline(raw_dir: Path, mapping_file: Path, rules_file: Path, output_root: Path,
+                 public_dir: Path | None = None) -> dict:
     """모든 단계를 순서대로 실행한다. 실패 뒤 단계는 실행하지 않는다."""
     started = datetime.now(timezone.utc)
     run_id = started.strftime("%Y%m%dT%H%M%SZ")
@@ -47,6 +49,15 @@ def run_pipeline(raw_dir: Path, mapping_file: Path, rules_file: Path, output_roo
         return next(item for item in summary["stages"] if item["name"] == name)
 
     try:
+        if public_dir is None:
+            stage("PUBLIC_EVIDENCE")["status"] = "SKIPPED"
+        else:
+            stage("PUBLIC_EVIDENCE")["status"] = "RUNNING"
+            public_result = adapt_public_data(public_dir.resolve(), run_dir / "00_public_evidence")
+            stage("PUBLIC_EVIDENCE").update(status=public_result["status"], result=public_result)
+            if public_result["status"] != "READY":
+                raise RuntimeError("공개자료 표준화 또는 데이터 검증 실패")
+
         stage("IMPORT_VALIDATE")["status"] = "RUNNING"
         imported = import_and_validate(raw_dir.resolve(), mapping_file.resolve(), run_dir / "01_import")
         stage("IMPORT_VALIDATE").update(status=imported["status"], result=imported)
@@ -124,8 +135,9 @@ def main() -> int:
     parser.add_argument("mapping_file", type=Path)
     parser.add_argument("--rules", type=Path, default=Path("enterprise_data/enterprise_analysis_rules.json"))
     parser.add_argument("--output-root", type=Path, default=Path("results/enterprise_pipeline"))
+    parser.add_argument("--public-dir", type=Path, default=None, help="monthly_panel.csv와 recall_detection_12m.csv 폴더")
     args = parser.parse_args()
-    result = run_pipeline(args.raw_dir, args.mapping_file, args.rules, args.output_root)
+    result = run_pipeline(args.raw_dir, args.mapping_file, args.rules, args.output_root, args.public_dir)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0 if result["status"] == "READY" else 2
 

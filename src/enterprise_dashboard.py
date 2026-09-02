@@ -150,6 +150,11 @@ def dashboard_summary(database: Path, pipeline_summary: Path) -> dict:
     finally:
         connection.close()
     pipeline = json.loads(pipeline_summary.read_text(encoding="utf-8-sig")) if pipeline_summary.exists() else {}
+    public_stage = next(
+        (item for item in pipeline.get("stages", []) if item.get("name") == "PUBLIC_EVIDENCE"), {}
+    )
+    public_result = public_stage.get("result", {}) if isinstance(public_stage.get("result", {}), dict) else {}
+    public_files = public_result.get("files", {}) if isinstance(public_result.get("files", {}), dict) else {}
     return {
         "lot_count": values[0], "high_risk_lots": values[1] or 0,
         "watch_lots": values[2] or 0, "affected_vehicle_links": affected,
@@ -158,6 +163,13 @@ def dashboard_summary(database: Path, pipeline_summary: Path) -> dict:
         "decision_gate_passed": pipeline.get("decision_gate_passed", False),
         "decision_notice": pipeline.get("decision_notice", "판단 기준 정보를 확인할 수 없습니다."),
         "run_id": pipeline.get("run_id", "UNKNOWN"),
+        "public_evidence_status": public_stage.get("status", "NOT_RUN"),
+        "public_normalized_rows": public_result.get("normalized_rows", 0),
+        "public_error_count": public_result.get("error_count", 0),
+        "public_linkage_policy": public_result.get("linkage_policy", "NOT_AVAILABLE"),
+        "public_monthly_rows": public_files.get("monthly_panel.csv", {}).get("rows", 0),
+        "public_recall_rows": public_files.get("recall_detection_12m.csv", {}).get("rows", 0),
+        "public_file_count": len(public_files),
     }
 
 

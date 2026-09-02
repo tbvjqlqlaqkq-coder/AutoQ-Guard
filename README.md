@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17.10-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
-[![Tests](https://img.shields.io/badge/Tests-23%2F23_PASS-159957)](./ACCEPTANCE_TEST.md)
+[![Tests](https://img.shields.io/badge/Tests-Automated-159957)](./ACCEPTANCE_TEST.md)
 [![Data](https://img.shields.io/badge/Data-Public_%2B_Synthetic-F28C28)](./docs/LIMITATIONS_AND_ENTERPRISE.md)
 
 생산현장에서 부품 불량을 더 일찍 발견하면 출고 전 차단은 물론, 이미 출고된 차량도 문제 LOT가 장착된 VIN만 빠르게 좁힐 수 있습니다. AutoQ-Guard는 이 생각을 공개 리콜 데이터와 합성 생산데이터로 구현하고, 위험 탐지 결과를 **영향 차량 수·예상 손실·대응비용·ROI**로 바꾸어 보여주는 개인 프로젝트입니다.
@@ -64,7 +64,7 @@ flowchart LR
 - 20명·15초 동시조회 442,833건, 실패 0건
 - 단일 LOT 조회 0.477ms
 - 5종 데이터 통합 중 오류 발생 시 전체 롤백 PASS
-- 자동검사 23/23 PASS
+- 자동검사 30/30 PASS
 
 성능시험은 로컬 Docker 환경의 제한된 조건에서 수행했습니다. 수치는 상용 운영환경의 처리량 보장이 아니라 구현 검증 결과입니다.
 
@@ -86,6 +86,7 @@ Python 3.10 이상에서 다음 명령을 실행합니다.
 ```bash
 python -m pip install -r requirements.txt
 python src/enterprise_pipeline.py enterprise_data/demo_company_raw enterprise_data/demo_company_mapping.json
+python src/enterprise_pipeline.py enterprise_data/demo_company_raw enterprise_data/demo_company_mapping.json --public-dir data/public
 python src/enterprise_dashboard.py
 ```
 
@@ -169,6 +170,7 @@ AutoQ-Guard/
 - [모델 검증 보고서](docs/model_validation/MODEL_VALIDATION_REPORT.md)
 - [공개 저장소 구성 설명](docs/GITHUB_PUBLIC_RELEASE.md)
 - [핵심 소스코드 리뷰 가이드](docs/SOURCE_CODE_REVIEW_GUIDE.md)
+- [공개자료·기업자료 통합 설계](docs/PUBLIC_ENTERPRISE_INTEGRATION.md)
 
 ## 프로젝트 상태
 

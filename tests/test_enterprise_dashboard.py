@@ -34,6 +34,22 @@ class EnterpriseDashboardTests(unittest.TestCase):
         self.assertEqual(result["high_risk_lots"], 1)
         self.assertFalse(result["decision_gate_passed"])
 
+    def test_summary_exposes_public_evidence_status(self):
+        result = run_pipeline(
+            ROOT / "enterprise_data" / "demo_company_raw",
+            ROOT / "enterprise_data" / "demo_company_mapping.json",
+            ROOT / "enterprise_data" / "enterprise_analysis_rules.json",
+            self.base / "public_pipeline",
+            ROOT / "data" / "public",
+        )
+        current = self.base / "public_pipeline" / "current"
+        summary = dashboard_summary(current / "03_database" / "automotive_quality.db", current / "pipeline_summary.json")
+        self.assertEqual(result["status"], "READY")
+        self.assertEqual(summary["public_evidence_status"], "READY")
+        self.assertEqual(summary["public_normalized_rows"], 176082)
+        self.assertEqual(summary["public_error_count"], 0)
+        self.assertEqual(summary["public_file_count"], 2)
+
     def test_search_and_input_limit(self):
         rows = validated_search(self.db, {"lot_id": ["LOT-DEMO-001"]})
         self.assertEqual(rows[0]["risk_level"], "HIGH")
