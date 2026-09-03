@@ -1,0 +1,131 @@
+{
+  "status": "MATURE_LABEL_RETROSPECTIVE_COMPARISON",
+  "source_sha256": "0a6040d6c99e13ebc70543508060b949f77b9727b883403e7e3c521427a28a49",
+  "python": "3.12.13",
+  "sklearn": "1.7.1",
+  "numpy": "2.5.2",
+  "seed": 20260805,
+  "features": [
+    "YEAR",
+    "COMPLAINTS",
+    "SERIOUS",
+    "INVESTIGATIONS",
+    "C3",
+    "P3",
+    "S3",
+    "I3",
+    "BRAND",
+    "CAT"
+  ],
+  "split_sizes": {
+    "train": 13177,
+    "validation": 16533,
+    "test": 11289
+  },
+  "threshold_policy": "Validation only: grid 0.05..0.95 step 0.01; FP+10*FN minimum subject to recall >= fixed rule; no feasible threshold means rejected.",
+  "test_reused_period": true,
+  "publication_history_verified": false,
+  "model_refit_after_validation": false,
+  "models": {
+    "fixed_rule": {
+      "validation": {
+        "rows": 16533,
+        "positives": 806,
+        "alerts": 1093,
+        "tp": 95,
+        "fp": 998,
+        "fn": 711,
+        "tn": 14729,
+        "precision": 0.08691674290942361,
+        "recall": 0.11786600496277916,
+        "f1": 0.10005265929436545,
+        "cost_units_fp1_fn10": 8108
+      },
+      "test": {
+        "rows": 11289,
+        "positives": 344,
+        "alerts": 389,
+        "tp": 42,
+        "fp": 347,
+        "fn": 302,
+        "tn": 10598,
+        "precision": 0.10796915167095116,
+        "recall": 0.12209302325581395,
+        "f1": 0.1145975443383356,
+        "cost_units_fp1_fn10": 3367
+      }
+    },
+    "logistic_regression": {
+      "threshold": 0.65,
+      "validation": {
+        "rows": 16533,
+        "positives": 806,
+        "alerts": 2958,
+        "tp": 221,
+        "fp": 2737,
+        "fn": 585,
+        "tn": 12990,
+        "precision": 0.07471264367816093,
+        "recall": 0.27419354838709675,
+        "f1": 0.11742826780021254,
+        "cost_units_fp1_fn10": 8587,
+        "pr_auc": 0.06767148125294219,
+        "roc_auc": 0.6062716581195179
+      },
+      "test": {
+        "rows": 11289,
+        "positives": 344,
+        "alerts": 2612,
+        "tp": 129,
+        "fp": 2483,
+        "fn": 215,
+        "tn": 8462,
+        "precision": 0.04938744257274119,
+        "recall": 0.375,
+        "f1": 0.08728010825439783,
+        "cost_units_fp1_fn10": 4633,
+        "pr_auc": 0.0404782173191503,
+        "roc_auc": 0.6192030448224208
+      }
+    },
+    "random_forest": {
+      "threshold": 0.67,
+      "validation": {
+        "rows": 16533,
+        "positives": 806,
+        "alerts": 1682,
+        "tp": 99,
+        "fp": 1583,
+        "fn": 707,
+        "tn": 14144,
+        "precision": 0.058858501783590964,
+        "recall": 0.1228287841191067,
+        "f1": 0.07958199356913183,
+        "cost_units_fp1_fn10": 8653,
+        "pr_auc": 0.062099699721338164,
+        "roc_auc": 0.6081703700279316
+      },
+      "test": {
+        "rows": 11289,
+        "positives": 344,
+        "alerts": 1277,
+        "tp": 24,
+        "fp": 1253,
+        "fn": 320,
+        "tn": 9692,
+        "precision": 0.018794048551292093,
+        "recall": 0.06976744186046512,
+        "f1": 0.02961135101789019,
+        "cost_units_fp1_fn10": 4453,
+        "pr_auc": 0.037797128867678914,
+        "roc_auc": 0.6267773858722789
+      }
+    }
+  },
+  "cautions": [
+    "Restricted first-observed surveillance cohort, not entire fleet.",
+    "Stored signal content and investigation publication dates remain unverified.",
+    "Cost units are not KRW; no prevention or ROI established.",
+    "Historical periods already examined; not an independent new holdout."
+  ]
+}
