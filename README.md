@@ -14,6 +14,8 @@
 
 ## 프로젝트를 30초 안에 보기
 
+최근 추가: [공개 경보 검토 화면](https://tbvjqlqlaqkq-coder.github.io/AutoQ-Guard/demo/alert-review.html) · [화면 동작 검증 기록](docs/model_validation/BROWSER_ACCEPTANCE.md) · [비용 가정 분석](docs/model_validation/COST_SENSITIVITY.md). 경보 원본을 보존하며 실제 리콜 예방·기업 ROI를 확정하지 않습니다.
+
 | 무엇을 만들었나 | 확인한 결과 | 아직 확정할 수 없는 것 |
 |---|---|---|
 | LOT–검사–VIN–클레임 연결 | PostgreSQL 12개 업무 테이블 실구동 | 실제 생산라인 탐지율 |

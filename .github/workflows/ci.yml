@@ -34,3 +34,6 @@ jobs:
 
       - name: Run unit and integration tests
         run: python -m unittest discover -s tests -v
+
+      - name: Verify public alert view matches build receipt
+        run: python src/verify_alert_artifact.py
