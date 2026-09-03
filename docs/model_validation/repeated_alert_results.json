@@ -1,0 +1,368 @@
+{
+  "source_sha256": "e4da551d492656e8dafaecf97e18fcbd80275e21aad10fd392d976137be15634",
+  "period": "2025-01 through 2025-06, mature test rows only",
+  "retrospective": true,
+  "production_policy_changed": false,
+  "results": [
+    {
+      "model": "fixed_rule",
+      "policy": "monthly",
+      "raw_alert_rows": 389,
+      "review_rows": 389,
+      "suppressed_rows": 0,
+      "reduction_rate": 0.0,
+      "positive_alert_rows": 42,
+      "retained_positive_rows": 42,
+      "suppressed_positive_rows": 0,
+      "consecutive_episodes": 196,
+      "positive_episodes": 22,
+      "positive_episodes_without_retained_positive": 0,
+      "monthly": {
+        "24301": {
+          "raw": 50,
+          "kept": 50
+        },
+        "24302": {
+          "raw": 62,
+          "kept": 62
+        },
+        "24303": {
+          "raw": 72,
+          "kept": 72
+        },
+        "24304": {
+          "raw": 72,
+          "kept": 72
+        },
+        "24305": {
+          "raw": 69,
+          "kept": 69
+        },
+        "24306": {
+          "raw": 64,
+          "kept": 64
+        }
+      }
+    },
+    {
+      "model": "fixed_rule",
+      "policy": "consecutive",
+      "raw_alert_rows": 389,
+      "review_rows": 196,
+      "suppressed_rows": 193,
+      "reduction_rate": 0.4961439588688946,
+      "positive_alert_rows": 42,
+      "retained_positive_rows": 20,
+      "suppressed_positive_rows": 22,
+      "consecutive_episodes": 196,
+      "positive_episodes": 22,
+      "positive_episodes_without_retained_positive": 2,
+      "monthly": {
+        "24301": {
+          "raw": 50,
+          "kept": 50
+        },
+        "24302": {
+          "raw": 62,
+          "kept": 30
+        },
+        "24303": {
+          "raw": 72,
+          "kept": 31
+        },
+        "24304": {
+          "raw": 72,
+          "kept": 28
+        },
+        "24305": {
+          "raw": 69,
+          "kept": 25
+        },
+        "24306": {
+          "raw": 64,
+          "kept": 32
+        }
+      }
+    },
+    {
+      "model": "fixed_rule",
+      "policy": "cooldown_3m",
+      "raw_alert_rows": 389,
+      "review_rows": 210,
+      "suppressed_rows": 179,
+      "reduction_rate": 0.4601542416452442,
+      "positive_alert_rows": 42,
+      "retained_positive_rows": 22,
+      "suppressed_positive_rows": 20,
+      "consecutive_episodes": 196,
+      "positive_episodes": 22,
+      "positive_episodes_without_retained_positive": 0,
+      "monthly": {
+        "24301": {
+          "raw": 50,
+          "kept": 50
+        },
+        "24302": {
+          "raw": 62,
+          "kept": 30
+        },
+        "24303": {
+          "raw": 72,
+          "kept": 31
+        },
+        "24304": {
+          "raw": 72,
+          "kept": 31
+        },
+        "24305": {
+          "raw": 69,
+          "kept": 33
+        },
+        "24306": {
+          "raw": 64,
+          "kept": 35
+        }
+      }
+    },
+    {
+      "model": "logistic_regression",
+      "policy": "monthly",
+      "raw_alert_rows": 2612,
+      "review_rows": 2612,
+      "suppressed_rows": 0,
+      "reduction_rate": 0.0,
+      "positive_alert_rows": 129,
+      "retained_positive_rows": 129,
+      "suppressed_positive_rows": 0,
+      "consecutive_episodes": 487,
+      "positive_episodes": 35,
+      "positive_episodes_without_retained_positive": 0,
+      "monthly": {
+        "24301": {
+          "raw": 410,
+          "kept": 410
+        },
+        "24302": {
+          "raw": 420,
+          "kept": 420
+        },
+        "24303": {
+          "raw": 436,
+          "kept": 436
+        },
+        "24304": {
+          "raw": 440,
+          "kept": 440
+        },
+        "24305": {
+          "raw": 450,
+          "kept": 450
+        },
+        "24306": {
+          "raw": 456,
+          "kept": 456
+        }
+      }
+    },
+    {
+      "model": "logistic_regression",
+      "policy": "consecutive",
+      "raw_alert_rows": 2612,
+      "review_rows": 487,
+      "suppressed_rows": 2125,
+      "reduction_rate": 0.8135528330781011,
+      "positive_alert_rows": 129,
+      "retained_positive_rows": 30,
+      "suppressed_positive_rows": 99,
+      "consecutive_episodes": 487,
+      "positive_episodes": 35,
+      "positive_episodes_without_retained_positive": 5,
+      "monthly": {
+        "24301": {
+          "raw": 410,
+          "kept": 410
+        },
+        "24302": {
+          "raw": 420,
+          "kept": 16
+        },
+        "24303": {
+          "raw": 436,
+          "kept": 19
+        },
+        "24304": {
+          "raw": 440,
+          "kept": 12
+        },
+        "24305": {
+          "raw": 450,
+          "kept": 18
+        },
+        "24306": {
+          "raw": 456,
+          "kept": 12
+        }
+      }
+    },
+    {
+      "model": "logistic_regression",
+      "policy": "cooldown_3m",
+      "raw_alert_rows": 2612,
+      "review_rows": 910,
+      "suppressed_rows": 1702,
+      "reduction_rate": 0.6516079632465543,
+      "positive_alert_rows": 129,
+      "retained_positive_rows": 52,
+      "suppressed_positive_rows": 77,
+      "consecutive_episodes": 487,
+      "positive_episodes": 35,
+      "positive_episodes_without_retained_positive": 1,
+      "monthly": {
+        "24301": {
+          "raw": 410,
+          "kept": 410
+        },
+        "24302": {
+          "raw": 420,
+          "kept": 16
+        },
+        "24303": {
+          "raw": 436,
+          "kept": 16
+        },
+        "24304": {
+          "raw": 440,
+          "kept": 412
+        },
+        "24305": {
+          "raw": 450,
+          "kept": 30
+        },
+        "24306": {
+          "raw": 456,
+          "kept": 26
+        }
+      }
+    },
+    {
+      "model": "random_forest",
+      "policy": "monthly",
+      "raw_alert_rows": 1277,
+      "review_rows": 1277,
+      "suppressed_rows": 0,
+      "reduction_rate": 0.0,
+      "positive_alert_rows": 24,
+      "retained_positive_rows": 24,
+      "suppressed_positive_rows": 0,
+      "consecutive_episodes": 360,
+      "positive_episodes": 13,
+      "positive_episodes_without_retained_positive": 0,
+      "monthly": {
+        "24301": {
+          "raw": 207,
+          "kept": 207
+        },
+        "24302": {
+          "raw": 210,
+          "kept": 210
+        },
+        "24303": {
+          "raw": 204,
+          "kept": 204
+        },
+        "24304": {
+          "raw": 212,
+          "kept": 212
+        },
+        "24305": {
+          "raw": 222,
+          "kept": 222
+        },
+        "24306": {
+          "raw": 222,
+          "kept": 222
+        }
+      }
+    },
+    {
+      "model": "random_forest",
+      "policy": "consecutive",
+      "raw_alert_rows": 1277,
+      "review_rows": 360,
+      "suppressed_rows": 917,
+      "reduction_rate": 0.7180892717306187,
+      "positive_alert_rows": 24,
+      "retained_positive_rows": 13,
+      "suppressed_positive_rows": 11,
+      "consecutive_episodes": 360,
+      "positive_episodes": 13,
+      "positive_episodes_without_retained_positive": 0,
+      "monthly": {
+        "24301": {
+          "raw": 207,
+          "kept": 207
+        },
+        "24302": {
+          "raw": 210,
+          "kept": 35
+        },
+        "24303": {
+          "raw": 204,
+          "kept": 22
+        },
+        "24304": {
+          "raw": 212,
+          "kept": 34
+        },
+        "24305": {
+          "raw": 222,
+          "kept": 34
+        },
+        "24306": {
+          "raw": 222,
+          "kept": 28
+        }
+      }
+    },
+    {
+      "model": "random_forest",
+      "policy": "cooldown_3m",
+      "raw_alert_rows": 1277,
+      "review_rows": 521,
+      "suppressed_rows": 756,
+      "reduction_rate": 0.5920125293657008,
+      "positive_alert_rows": 24,
+      "retained_positive_rows": 15,
+      "suppressed_positive_rows": 9,
+      "consecutive_episodes": 360,
+      "positive_episodes": 13,
+      "positive_episodes_without_retained_positive": 0,
+      "monthly": {
+        "24301": {
+          "raw": 207,
+          "kept": 207
+        },
+        "24302": {
+          "raw": 210,
+          "kept": 35
+        },
+        "24303": {
+          "raw": 204,
+          "kept": 19
+        },
+        "24304": {
+          "raw": 212,
+          "kept": 183
+        },
+        "24305": {
+          "raw": 222,
+          "kept": 48
+        },
+        "24306": {
+          "raw": 222,
+          "kept": 29
+        }
+      }
+    }
+  ]
+}

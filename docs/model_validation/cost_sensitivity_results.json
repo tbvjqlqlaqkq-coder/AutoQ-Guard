@@ -1,0 +1,160 @@
+{
+  "status": "DESCRIPTIVE_FROZEN_PREDICTION_COST_SENSITIVITY",
+  "formula": "FP + ratio * FN; FP unit cost=1",
+  "thresholds_reoptimized": false,
+  "models_retrained": false,
+  "crossings_fixed_vs_logistic": {
+    "validation": 13.801587301587302,
+    "test": 24.551724137931036
+  },
+  "scenarios": [
+    {
+      "fn_to_fp_cost_ratio": 1,
+      "validation_costs": {
+        "fixed_rule": 1709,
+        "logistic_regression": 3322,
+        "random_forest": 2290
+      },
+      "test_costs": {
+        "fixed_rule": 649,
+        "logistic_regression": 2698,
+        "random_forest": 1573
+      },
+      "validation_selected_model": "fixed_rule",
+      "selected_model_test_cost": 649,
+      "test_lowest_for_description_only": "fixed_rule",
+      "reference_test_costs": {
+        "no_alert_reference": 344,
+        "all_alert_reference": 10945
+      }
+    },
+    {
+      "fn_to_fp_cost_ratio": 5,
+      "validation_costs": {
+        "fixed_rule": 4553,
+        "logistic_regression": 5662,
+        "random_forest": 5118
+      },
+      "test_costs": {
+        "fixed_rule": 1857,
+        "logistic_regression": 3558,
+        "random_forest": 2853
+      },
+      "validation_selected_model": "fixed_rule",
+      "selected_model_test_cost": 1857,
+      "test_lowest_for_description_only": "fixed_rule",
+      "reference_test_costs": {
+        "no_alert_reference": 1720,
+        "all_alert_reference": 10945
+      }
+    },
+    {
+      "fn_to_fp_cost_ratio": 10,
+      "validation_costs": {
+        "fixed_rule": 8108,
+        "logistic_regression": 8587,
+        "random_forest": 8653
+      },
+      "test_costs": {
+        "fixed_rule": 3367,
+        "logistic_regression": 4633,
+        "random_forest": 4453
+      },
+      "validation_selected_model": "fixed_rule",
+      "selected_model_test_cost": 3367,
+      "test_lowest_for_description_only": "fixed_rule",
+      "reference_test_costs": {
+        "no_alert_reference": 3440,
+        "all_alert_reference": 10945
+      }
+    },
+    {
+      "fn_to_fp_cost_ratio": 20,
+      "validation_costs": {
+        "fixed_rule": 15218,
+        "logistic_regression": 14437,
+        "random_forest": 15723
+      },
+      "test_costs": {
+        "fixed_rule": 6387,
+        "logistic_regression": 6783,
+        "random_forest": 7653
+      },
+      "validation_selected_model": "logistic_regression",
+      "selected_model_test_cost": 6783,
+      "test_lowest_for_description_only": "fixed_rule",
+      "reference_test_costs": {
+        "no_alert_reference": 6880,
+        "all_alert_reference": 10945
+      }
+    },
+    {
+      "fn_to_fp_cost_ratio": 25,
+      "validation_costs": {
+        "fixed_rule": 18773,
+        "logistic_regression": 17362,
+        "random_forest": 19258
+      },
+      "test_costs": {
+        "fixed_rule": 7897,
+        "logistic_regression": 7858,
+        "random_forest": 9253
+      },
+      "validation_selected_model": "logistic_regression",
+      "selected_model_test_cost": 7858,
+      "test_lowest_for_description_only": "logistic_regression",
+      "reference_test_costs": {
+        "no_alert_reference": 8600,
+        "all_alert_reference": 10945
+      }
+    },
+    {
+      "fn_to_fp_cost_ratio": 50,
+      "validation_costs": {
+        "fixed_rule": 36548,
+        "logistic_regression": 31987,
+        "random_forest": 36933
+      },
+      "test_costs": {
+        "fixed_rule": 15447,
+        "logistic_regression": 13233,
+        "random_forest": 17253
+      },
+      "validation_selected_model": "logistic_regression",
+      "selected_model_test_cost": 13233,
+      "test_lowest_for_description_only": "logistic_regression",
+      "reference_test_costs": {
+        "no_alert_reference": 17200,
+        "all_alert_reference": 10945
+      }
+    },
+    {
+      "fn_to_fp_cost_ratio": 100,
+      "validation_costs": {
+        "fixed_rule": 72098,
+        "logistic_regression": 61237,
+        "random_forest": 72283
+      },
+      "test_costs": {
+        "fixed_rule": 30547,
+        "logistic_regression": 23983,
+        "random_forest": 33253
+      },
+      "validation_selected_model": "logistic_regression",
+      "selected_model_test_cost": 23983,
+      "test_lowest_for_description_only": "logistic_regression",
+      "reference_test_costs": {
+        "no_alert_reference": 34400,
+        "all_alert_reference": 10945
+      }
+    }
+  ],
+  "limitations": [
+    "Unit is a group-month, not a recall campaign or vehicle.",
+    "No cost for true-alert review, residual defects, implementation, recurring duplicate alerts, or compensation.",
+    "Test crossings are descriptive and must not be used to claim independently selected optimal policy.",
+    "No/all-alert references are mathematical controls, not operational safety recommendations.",
+    "Ratios are hypothetical; no KRW savings or ROI demonstrated."
+  ],
+  "source_result_sha256": "09761cb7da3b6a6d6e6e308a84e086dd6f7b1932032c6126496591bd4223c879"
+}

@@ -1,0 +1,592 @@
+{
+  "status": "ILLUSTRATIVE_BREAK_EVEN_NOT_ENTERPRISE_ROI",
+  "assumptions": {
+    "review_cost": 50000,
+    "monthly_cost": 500000,
+    "setup_cost": 3000000,
+    "action_cost": 200000,
+    "success": 0.5,
+    "overlap": 0.3
+  },
+  "assumption_origin": "Illustrative placeholders, not company observations or market quotes",
+  "review_policy": "Uniform random review expectation within month; no backlog carryover, no oracle prioritization",
+  "baseline": "Existing response held unchanged; overlap reduces hypothetical incremental benefit; no claim of actual baseline measurement",
+  "source_sha256": "e4da551d492656e8dafaecf97e18fcbd80275e21aad10fd392d976137be15634",
+  "scenarios": [
+    {
+      "model": "fixed_rule",
+      "monthly_capacity": 50,
+      "months": [
+        {
+          "month": "2025-01-01",
+          "alerts": 50,
+          "reviewed": 50,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 5.0,
+          "expected_reviewed_negative_rows": 45.0
+        },
+        {
+          "month": "2025-02-01",
+          "alerts": 62,
+          "reviewed": 50,
+          "unreviewed": 12,
+          "expected_reviewed_positive_rows": 6.451612903225806,
+          "expected_reviewed_negative_rows": 43.54838709677419
+        },
+        {
+          "month": "2025-03-01",
+          "alerts": 72,
+          "reviewed": 50,
+          "unreviewed": 22,
+          "expected_reviewed_positive_rows": 6.944444444444445,
+          "expected_reviewed_negative_rows": 43.05555555555556
+        },
+        {
+          "month": "2025-04-01",
+          "alerts": 72,
+          "reviewed": 50,
+          "unreviewed": 22,
+          "expected_reviewed_positive_rows": 3.4722222222222223,
+          "expected_reviewed_negative_rows": 46.52777777777778
+        },
+        {
+          "month": "2025-05-01",
+          "alerts": 69,
+          "reviewed": 50,
+          "unreviewed": 19,
+          "expected_reviewed_positive_rows": 4.3478260869565215,
+          "expected_reviewed_negative_rows": 45.65217391304348
+        },
+        {
+          "month": "2025-06-01",
+          "alerts": 64,
+          "reviewed": 50,
+          "unreviewed": 14,
+          "expected_reviewed_positive_rows": 6.25,
+          "expected_reviewed_negative_rows": 43.75
+        }
+      ],
+      "alerts": 389,
+      "reviewed": 300,
+      "unreviewed": 89,
+      "unique_alerted_groups": 186,
+      "repeat_alert_rows": 203,
+      "expected_reviewed_positive_rows": 32.466105656848995,
+      "hypothetical_incremental_effective_positive_row_units": 11.363136979897147,
+      "assumed_incremental_cost_krw": 27493221.1313698,
+      "break_even_avoided_loss_krw_per_positive_row_unit": 2419509.7867788486
+    },
+    {
+      "model": "logistic_regression",
+      "monthly_capacity": 50,
+      "months": [
+        {
+          "month": "2025-01-01",
+          "alerts": 410,
+          "reviewed": 50,
+          "unreviewed": 360,
+          "expected_reviewed_positive_rows": 2.5609756097560976,
+          "expected_reviewed_negative_rows": 47.4390243902439
+        },
+        {
+          "month": "2025-02-01",
+          "alerts": 420,
+          "reviewed": 50,
+          "unreviewed": 370,
+          "expected_reviewed_positive_rows": 1.9047619047619047,
+          "expected_reviewed_negative_rows": 48.095238095238095
+        },
+        {
+          "month": "2025-03-01",
+          "alerts": 436,
+          "reviewed": 50,
+          "unreviewed": 386,
+          "expected_reviewed_positive_rows": 2.064220183486239,
+          "expected_reviewed_negative_rows": 47.935779816513765
+        },
+        {
+          "month": "2025-04-01",
+          "alerts": 440,
+          "reviewed": 50,
+          "unreviewed": 390,
+          "expected_reviewed_positive_rows": 2.727272727272727,
+          "expected_reviewed_negative_rows": 47.27272727272727
+        },
+        {
+          "month": "2025-05-01",
+          "alerts": 450,
+          "reviewed": 50,
+          "unreviewed": 400,
+          "expected_reviewed_positive_rows": 2.6666666666666665,
+          "expected_reviewed_negative_rows": 47.33333333333333
+        },
+        {
+          "month": "2025-06-01",
+          "alerts": 456,
+          "reviewed": 50,
+          "unreviewed": 406,
+          "expected_reviewed_positive_rows": 2.850877192982456,
+          "expected_reviewed_negative_rows": 47.14912280701754
+        }
+      ],
+      "alerts": 2612,
+      "reviewed": 300,
+      "unreviewed": 2312,
+      "unique_alerted_groups": 476,
+      "repeat_alert_rows": 2136,
+      "expected_reviewed_positive_rows": 14.77477428492609,
+      "hypothetical_incremental_effective_positive_row_units": 5.171170999724131,
+      "assumed_incremental_cost_krw": 23954954.85698522,
+      "break_even_avoided_loss_krw_per_positive_row_unit": 4632404.315823854
+    },
+    {
+      "model": "random_forest",
+      "monthly_capacity": 50,
+      "months": [
+        {
+          "month": "2025-01-01",
+          "alerts": 207,
+          "reviewed": 50,
+          "unreviewed": 157,
+          "expected_reviewed_positive_rows": 0.966183574879227,
+          "expected_reviewed_negative_rows": 49.03381642512077
+        },
+        {
+          "month": "2025-02-01",
+          "alerts": 210,
+          "reviewed": 50,
+          "unreviewed": 160,
+          "expected_reviewed_positive_rows": 0.47619047619047616,
+          "expected_reviewed_negative_rows": 49.52380952380952
+        },
+        {
+          "month": "2025-03-01",
+          "alerts": 204,
+          "reviewed": 50,
+          "unreviewed": 154,
+          "expected_reviewed_positive_rows": 0.9803921568627451,
+          "expected_reviewed_negative_rows": 49.01960784313725
+        },
+        {
+          "month": "2025-04-01",
+          "alerts": 212,
+          "reviewed": 50,
+          "unreviewed": 162,
+          "expected_reviewed_positive_rows": 0.7075471698113207,
+          "expected_reviewed_negative_rows": 49.29245283018868
+        },
+        {
+          "month": "2025-05-01",
+          "alerts": 222,
+          "reviewed": 50,
+          "unreviewed": 172,
+          "expected_reviewed_positive_rows": 1.3513513513513513,
+          "expected_reviewed_negative_rows": 48.64864864864865
+        },
+        {
+          "month": "2025-06-01",
+          "alerts": 222,
+          "reviewed": 50,
+          "unreviewed": 172,
+          "expected_reviewed_positive_rows": 1.1261261261261262,
+          "expected_reviewed_negative_rows": 48.873873873873876
+        }
+      ],
+      "alerts": 1277,
+      "reviewed": 300,
+      "unreviewed": 977,
+      "unique_alerted_groups": 327,
+      "repeat_alert_rows": 950,
+      "expected_reviewed_positive_rows": 5.607790855221246,
+      "hypothetical_incremental_effective_positive_row_units": 1.962726799327436,
+      "assumed_incremental_cost_krw": 22121558.17104425,
+      "break_even_avoided_loss_krw_per_positive_row_unit": 11270829.021453522
+    },
+    {
+      "model": "fixed_rule",
+      "monthly_capacity": 100,
+      "months": [
+        {
+          "month": "2025-01-01",
+          "alerts": 50,
+          "reviewed": 50,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 5.0,
+          "expected_reviewed_negative_rows": 45.0
+        },
+        {
+          "month": "2025-02-01",
+          "alerts": 62,
+          "reviewed": 62,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 8.0,
+          "expected_reviewed_negative_rows": 54.0
+        },
+        {
+          "month": "2025-03-01",
+          "alerts": 72,
+          "reviewed": 72,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 10.0,
+          "expected_reviewed_negative_rows": 62.0
+        },
+        {
+          "month": "2025-04-01",
+          "alerts": 72,
+          "reviewed": 72,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 5.0,
+          "expected_reviewed_negative_rows": 67.0
+        },
+        {
+          "month": "2025-05-01",
+          "alerts": 69,
+          "reviewed": 69,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 6.0,
+          "expected_reviewed_negative_rows": 63.0
+        },
+        {
+          "month": "2025-06-01",
+          "alerts": 64,
+          "reviewed": 64,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 8.0,
+          "expected_reviewed_negative_rows": 56.0
+        }
+      ],
+      "alerts": 389,
+      "reviewed": 389,
+      "unreviewed": 0,
+      "unique_alerted_groups": 186,
+      "repeat_alert_rows": 203,
+      "expected_reviewed_positive_rows": 42.0,
+      "hypothetical_incremental_effective_positive_row_units": 14.7,
+      "assumed_incremental_cost_krw": 33850000.0,
+      "break_even_avoided_loss_krw_per_positive_row_unit": 2302721.088435374
+    },
+    {
+      "model": "logistic_regression",
+      "monthly_capacity": 100,
+      "months": [
+        {
+          "month": "2025-01-01",
+          "alerts": 410,
+          "reviewed": 100,
+          "unreviewed": 310,
+          "expected_reviewed_positive_rows": 5.121951219512195,
+          "expected_reviewed_negative_rows": 94.8780487804878
+        },
+        {
+          "month": "2025-02-01",
+          "alerts": 420,
+          "reviewed": 100,
+          "unreviewed": 320,
+          "expected_reviewed_positive_rows": 3.8095238095238093,
+          "expected_reviewed_negative_rows": 96.19047619047619
+        },
+        {
+          "month": "2025-03-01",
+          "alerts": 436,
+          "reviewed": 100,
+          "unreviewed": 336,
+          "expected_reviewed_positive_rows": 4.128440366972478,
+          "expected_reviewed_negative_rows": 95.87155963302753
+        },
+        {
+          "month": "2025-04-01",
+          "alerts": 440,
+          "reviewed": 100,
+          "unreviewed": 340,
+          "expected_reviewed_positive_rows": 5.454545454545454,
+          "expected_reviewed_negative_rows": 94.54545454545455
+        },
+        {
+          "month": "2025-05-01",
+          "alerts": 450,
+          "reviewed": 100,
+          "unreviewed": 350,
+          "expected_reviewed_positive_rows": 5.333333333333333,
+          "expected_reviewed_negative_rows": 94.66666666666666
+        },
+        {
+          "month": "2025-06-01",
+          "alerts": 456,
+          "reviewed": 100,
+          "unreviewed": 356,
+          "expected_reviewed_positive_rows": 5.701754385964912,
+          "expected_reviewed_negative_rows": 94.29824561403508
+        }
+      ],
+      "alerts": 2612,
+      "reviewed": 600,
+      "unreviewed": 2012,
+      "unique_alerted_groups": 476,
+      "repeat_alert_rows": 2136,
+      "expected_reviewed_positive_rows": 29.54954856985218,
+      "hypothetical_incremental_effective_positive_row_units": 10.342341999448262,
+      "assumed_incremental_cost_krw": 41909909.71397044,
+      "break_even_avoided_loss_krw_per_positive_row_unit": 4052264.923767385
+    },
+    {
+      "model": "random_forest",
+      "monthly_capacity": 100,
+      "months": [
+        {
+          "month": "2025-01-01",
+          "alerts": 207,
+          "reviewed": 100,
+          "unreviewed": 107,
+          "expected_reviewed_positive_rows": 1.932367149758454,
+          "expected_reviewed_negative_rows": 98.06763285024154
+        },
+        {
+          "month": "2025-02-01",
+          "alerts": 210,
+          "reviewed": 100,
+          "unreviewed": 110,
+          "expected_reviewed_positive_rows": 0.9523809523809523,
+          "expected_reviewed_negative_rows": 99.04761904761904
+        },
+        {
+          "month": "2025-03-01",
+          "alerts": 204,
+          "reviewed": 100,
+          "unreviewed": 104,
+          "expected_reviewed_positive_rows": 1.9607843137254901,
+          "expected_reviewed_negative_rows": 98.0392156862745
+        },
+        {
+          "month": "2025-04-01",
+          "alerts": 212,
+          "reviewed": 100,
+          "unreviewed": 112,
+          "expected_reviewed_positive_rows": 1.4150943396226414,
+          "expected_reviewed_negative_rows": 98.58490566037736
+        },
+        {
+          "month": "2025-05-01",
+          "alerts": 222,
+          "reviewed": 100,
+          "unreviewed": 122,
+          "expected_reviewed_positive_rows": 2.7027027027027026,
+          "expected_reviewed_negative_rows": 97.2972972972973
+        },
+        {
+          "month": "2025-06-01",
+          "alerts": 222,
+          "reviewed": 100,
+          "unreviewed": 122,
+          "expected_reviewed_positive_rows": 2.2522522522522523,
+          "expected_reviewed_negative_rows": 97.74774774774775
+        }
+      ],
+      "alerts": 1277,
+      "reviewed": 600,
+      "unreviewed": 677,
+      "unique_alerted_groups": 327,
+      "repeat_alert_rows": 950,
+      "expected_reviewed_positive_rows": 11.215581710442493,
+      "hypothetical_incremental_effective_positive_row_units": 3.925453598654872,
+      "assumed_incremental_cost_krw": 38243116.3420885,
+      "break_even_avoided_loss_krw_per_positive_row_unit": 9742343.24287853
+    },
+    {
+      "model": "fixed_rule",
+      "monthly_capacity": 300,
+      "months": [
+        {
+          "month": "2025-01-01",
+          "alerts": 50,
+          "reviewed": 50,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 5.0,
+          "expected_reviewed_negative_rows": 45.0
+        },
+        {
+          "month": "2025-02-01",
+          "alerts": 62,
+          "reviewed": 62,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 8.0,
+          "expected_reviewed_negative_rows": 54.0
+        },
+        {
+          "month": "2025-03-01",
+          "alerts": 72,
+          "reviewed": 72,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 10.0,
+          "expected_reviewed_negative_rows": 62.0
+        },
+        {
+          "month": "2025-04-01",
+          "alerts": 72,
+          "reviewed": 72,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 5.0,
+          "expected_reviewed_negative_rows": 67.0
+        },
+        {
+          "month": "2025-05-01",
+          "alerts": 69,
+          "reviewed": 69,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 6.0,
+          "expected_reviewed_negative_rows": 63.0
+        },
+        {
+          "month": "2025-06-01",
+          "alerts": 64,
+          "reviewed": 64,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 8.0,
+          "expected_reviewed_negative_rows": 56.0
+        }
+      ],
+      "alerts": 389,
+      "reviewed": 389,
+      "unreviewed": 0,
+      "unique_alerted_groups": 186,
+      "repeat_alert_rows": 203,
+      "expected_reviewed_positive_rows": 42.0,
+      "hypothetical_incremental_effective_positive_row_units": 14.7,
+      "assumed_incremental_cost_krw": 33850000.0,
+      "break_even_avoided_loss_krw_per_positive_row_unit": 2302721.088435374
+    },
+    {
+      "model": "logistic_regression",
+      "monthly_capacity": 300,
+      "months": [
+        {
+          "month": "2025-01-01",
+          "alerts": 410,
+          "reviewed": 300,
+          "unreviewed": 110,
+          "expected_reviewed_positive_rows": 15.365853658536585,
+          "expected_reviewed_negative_rows": 284.6341463414634
+        },
+        {
+          "month": "2025-02-01",
+          "alerts": 420,
+          "reviewed": 300,
+          "unreviewed": 120,
+          "expected_reviewed_positive_rows": 11.428571428571429,
+          "expected_reviewed_negative_rows": 288.57142857142856
+        },
+        {
+          "month": "2025-03-01",
+          "alerts": 436,
+          "reviewed": 300,
+          "unreviewed": 136,
+          "expected_reviewed_positive_rows": 12.38532110091743,
+          "expected_reviewed_negative_rows": 287.61467889908255
+        },
+        {
+          "month": "2025-04-01",
+          "alerts": 440,
+          "reviewed": 300,
+          "unreviewed": 140,
+          "expected_reviewed_positive_rows": 16.363636363636363,
+          "expected_reviewed_negative_rows": 283.6363636363636
+        },
+        {
+          "month": "2025-05-01",
+          "alerts": 450,
+          "reviewed": 300,
+          "unreviewed": 150,
+          "expected_reviewed_positive_rows": 16.0,
+          "expected_reviewed_negative_rows": 284.0
+        },
+        {
+          "month": "2025-06-01",
+          "alerts": 456,
+          "reviewed": 300,
+          "unreviewed": 156,
+          "expected_reviewed_positive_rows": 17.10526315789474,
+          "expected_reviewed_negative_rows": 282.89473684210526
+        }
+      ],
+      "alerts": 2612,
+      "reviewed": 1800,
+      "unreviewed": 812,
+      "unique_alerted_groups": 476,
+      "repeat_alert_rows": 2136,
+      "expected_reviewed_positive_rows": 88.64864570955655,
+      "hypothetical_incremental_effective_positive_row_units": 31.02702599834479,
+      "assumed_incremental_cost_krw": 113729729.14191131,
+      "break_even_avoided_loss_krw_per_positive_row_unit": 3665505.3290630723
+    },
+    {
+      "model": "random_forest",
+      "monthly_capacity": 300,
+      "months": [
+        {
+          "month": "2025-01-01",
+          "alerts": 207,
+          "reviewed": 207,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 4.0,
+          "expected_reviewed_negative_rows": 203.0
+        },
+        {
+          "month": "2025-02-01",
+          "alerts": 210,
+          "reviewed": 210,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 2.0,
+          "expected_reviewed_negative_rows": 208.0
+        },
+        {
+          "month": "2025-03-01",
+          "alerts": 204,
+          "reviewed": 204,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 4.0,
+          "expected_reviewed_negative_rows": 200.0
+        },
+        {
+          "month": "2025-04-01",
+          "alerts": 212,
+          "reviewed": 212,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 3.0,
+          "expected_reviewed_negative_rows": 209.0
+        },
+        {
+          "month": "2025-05-01",
+          "alerts": 222,
+          "reviewed": 222,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 6.0,
+          "expected_reviewed_negative_rows": 216.0
+        },
+        {
+          "month": "2025-06-01",
+          "alerts": 222,
+          "reviewed": 222,
+          "unreviewed": 0,
+          "expected_reviewed_positive_rows": 5.0,
+          "expected_reviewed_negative_rows": 217.0
+        }
+      ],
+      "alerts": 1277,
+      "reviewed": 1277,
+      "unreviewed": 0,
+      "unique_alerted_groups": 327,
+      "repeat_alert_rows": 950,
+      "expected_reviewed_positive_rows": 24.0,
+      "hypothetical_incremental_effective_positive_row_units": 8.399999999999999,
+      "assumed_incremental_cost_krw": 74650000.0,
+      "break_even_avoided_loss_krw_per_positive_row_unit": 8886904.761904763
+    }
+  ],
+  "limitations": [
+    "Positive group-months are not incidents, faulty parts, campaigns, or vehicles.",
+    "Repeated positive months may concern the same recall: do not multiply by a campaign-level loss.",
+    "Expected review positives describe retrospective association, not proven actionable defects.",
+    "Unreviewed alerts are dropped for this scenario, not queued into later months.",
+    "No actual prevention, customer benefit, savings or ROI is established.",
+    "Safety response is not overridden by capacity or cost limits."
+  ]
+}
