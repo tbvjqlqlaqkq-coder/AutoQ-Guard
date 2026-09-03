@@ -48,7 +48,7 @@ def threshold(y,prob,min_recall):
  return best[1] if best else 0.05
 
 def main():
- rows=load(ROOT/"monthly_panel.csv")
+ rows=load(ROOT/"data"/"public"/"monthly_panel.csv")
  train=[r for r in rows if r["month"]<datetime(2024,1,1)]
  valid=[r for r in rows if datetime(2024,1,1)<=r["month"]<datetime(2025,1,1)]
  test=[r for r in rows if r["month"]>=datetime(2025,1,1)]
@@ -67,7 +67,9 @@ def main():
   model.fit(Xtr,ytr); pv=model.predict_proba(Xv)[:,1]; t=threshold(yv,pv,rule_valid["recall"]); pt=model.predict_proba(Xt)[:,1]
   result["models"][name]={"threshold":t,"validation":metric(yv,(pv>=t).astype(int),pv),"test":metric(yt,(pt>=t).astype(int),pt)}
  result["dataset"]={"total":len(rows),"train":len(train),"validation":len(valid),"test":len(test),"test_positive_rate":float(yt.mean())}
- out=Path(__file__).resolve().parent/"results"; out.mkdir(exist_ok=True)
+ result["validation_status"]="HISTORICAL_REPRODUCTION_ONLY"
+ result["limitations"]=["Outcome coverage and first-publication timestamps are unverified.", "12-month labels can cross split boundaries; this legacy comparison is not a purged prospective evaluation.", "All periods were previously evaluated; not a new independent holdout."]
+ out=ROOT/"results"/"model_validation"; out.mkdir(parents=True,exist_ok=True)
  (out/"model_comparison.json").write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8-sig")
  with (out/"model_comparison.csv").open("w",encoding="utf-8-sig",newline="") as f:
   fields=["model","threshold","rows","positives","alerts","tp","fp","fn","tn","precision","recall","f1","pr_auc","roc_auc","cost_units_fp1_fn10"]

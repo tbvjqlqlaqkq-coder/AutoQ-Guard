@@ -59,6 +59,12 @@ def public_backtest():
 
     return {
         "evidence_class": "A_PUBLIC_OBSERVED",
+        "validation_status": "RETROSPECTIVE_REPRODUCTION_NOT_PROSPECTIVE_VALIDATION",
+        "outcome_coverage_verified": False,
+        "publication_time_verified": False,
+        "recall_metric_unit": "campaign_model_year_component_row",
+        "unique_recall_campaigns": len({row["캠페인"] for row in recalls}),
+        "warning": "Historical stored-label reproduction only; outcome maturity and point-in-time availability are not verified. Recall rows are not unique campaigns or vehicles.",
         "source": "NHTSA-derived saved public dataset",
         "complaints": summary["complaints"],
         "recall_records": len(recalls),

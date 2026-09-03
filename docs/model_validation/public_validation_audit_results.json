@@ -1,0 +1,95 @@
+{
+  "status": "RETROSPECTIVE_AUDIT_NOT_NEW_HOLDOUT",
+  "sha256": {
+    "monthly_panel.csv": "0a6040d6c99e13ebc70543508060b949f77b9727b883403e7e3c521427a28a49",
+    "recall_detection_12m.csv": "885369d54b9ec71765d5ea94f5bb5ec8db80db5ec9daf21d39679d609c8621a3",
+    "dataset_summary.json": "970af3df909dea62e97118587398e449e538b10ce09fcfa5df26a3c1c169eb8f"
+  },
+  "rule": "C3>=5 and (P3=0 or C3>=2*P3), or S3>=2, or I3>=1",
+  "panel_rows": 175344,
+  "panel_end": "2026-06-01",
+  "duplicate_group_month_rows": 0,
+  "stored_alert_rule_mismatches": 0,
+  "full_existing_test": {
+    "rows": 40464,
+    "tp": 132,
+    "fp": 1513,
+    "fn": 1392,
+    "tn": 37427,
+    "precision": 0.08024316109422493,
+    "recall": 0.08661417322834646,
+    "false_positive_rate": 0.03885464817668208,
+    "cost_units_fp1_fn10": 15433
+  },
+  "maturity_scenario": {
+    "assumption": "outcome coverage ends at panel end; not verified",
+    "last_eligible_month": "2025-06-01",
+    "eligible_test": {
+      "rows": 13488,
+      "tp": 42,
+      "fp": 347,
+      "fn": 677,
+      "tn": 12422,
+      "precision": 0.10796915167095116,
+      "recall": 0.0584144645340751,
+      "false_positive_rate": 0.02717518991307072,
+      "cost_units_fp1_fn10": 7117
+    },
+    "excluded_test": {
+      "rows": 26976,
+      "tp": 90,
+      "fp": 1166,
+      "fn": 715,
+      "tn": 25005,
+      "precision": 0.07165605095541401,
+      "recall": 0.11180124223602485,
+      "false_positive_rate": 0.04455313132856979,
+      "cost_units_fp1_fn10": 8316
+    }
+  },
+  "by_test_year": {
+    "2025": {
+      "rows": 26976,
+      "tp": 117,
+      "fp": 822,
+      "fn": 1241,
+      "tn": 24796,
+      "precision": 0.12460063897763578,
+      "recall": 0.0861561119293078,
+      "false_positive_rate": 0.032086813958935125,
+      "cost_units_fp1_fn10": 13232
+    },
+    "2026": {
+      "rows": 13488,
+      "tp": 15,
+      "fp": 691,
+      "fn": 151,
+      "tn": 12631,
+      "precision": 0.021246458923512748,
+      "recall": 0.09036144578313253,
+      "false_positive_rate": 0.0518690887254166,
+      "cost_units_fp1_fn10": 2201
+    }
+  },
+  "recall_table": {
+    "rows": 738,
+    "unique_campaign_ids": 214,
+    "any_row_detected_campaigns": 72,
+    "all_rows_detected_campaigns": 19,
+    "any_row_detection_rate": 0.3364485981308411,
+    "campaign_metric_note": "Descriptive regrouping of stored verdicts, not new backtest; any-row detection does not mean every vehicle is detected.",
+    "campaigns_with_multiple_rows": 144,
+    "verdict_counts": {
+      "미탐지": 586,
+      "탐지": 152
+    }
+  },
+  "limitations": [
+    "All supplied periods were already used in reported evaluation; no independent new holdout.",
+    "Raw publication timestamps and outcome coverage date are not supplied in these aggregate tables.",
+    "C3/P3/S3/I3 availability at prediction time is not established by rule reproduction.",
+    "12-month training labels may overlap validation; historical fit dates and label maturity require audit.",
+    "Recall table rows are campaign/model/year/category records, not unique campaigns or vehicles.",
+    "Maturity scenario results use stored Y12 labels and are not an independently reconstructed ground truth."
+  ]
+}
