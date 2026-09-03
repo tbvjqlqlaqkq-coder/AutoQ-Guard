@@ -1,0 +1,131 @@
+{
+  "source_sha256": "e4da551d492656e8dafaecf97e18fcbd80275e21aad10fd392d976137be15634",
+  "html_sha256": "c839aefffe4ec2cab6e1b3f2bffbdf3b2031b186b4f6ab7d0874b2d76e32e58d",
+  "input_rows": 11289,
+  "original_alerts": 389,
+  "rendered_alerts": 389,
+  "rendered_groups": 186,
+  "comparisons": [
+    {
+      "model": "fixed_rule",
+      "policy": "monthly",
+      "raw_alert_rows": 389,
+      "review_rows": 389,
+      "suppressed_rows": 0,
+      "reduction_rate": 0.0,
+      "positive_alert_rows": 42,
+      "retained_positive_rows": 42,
+      "suppressed_positive_rows": 0,
+      "consecutive_episodes": 196,
+      "positive_episodes": 22,
+      "positive_episodes_without_retained_positive": 0,
+      "monthly": {
+        "24301": {
+          "raw": 50,
+          "kept": 50
+        },
+        "24302": {
+          "raw": 62,
+          "kept": 62
+        },
+        "24303": {
+          "raw": 72,
+          "kept": 72
+        },
+        "24304": {
+          "raw": 72,
+          "kept": 72
+        },
+        "24305": {
+          "raw": 69,
+          "kept": 69
+        },
+        "24306": {
+          "raw": 64,
+          "kept": 64
+        }
+      }
+    },
+    {
+      "model": "fixed_rule",
+      "policy": "consecutive",
+      "raw_alert_rows": 389,
+      "review_rows": 196,
+      "suppressed_rows": 193,
+      "reduction_rate": 0.4961439588688946,
+      "positive_alert_rows": 42,
+      "retained_positive_rows": 20,
+      "suppressed_positive_rows": 22,
+      "consecutive_episodes": 196,
+      "positive_episodes": 22,
+      "positive_episodes_without_retained_positive": 2,
+      "monthly": {
+        "24301": {
+          "raw": 50,
+          "kept": 50
+        },
+        "24302": {
+          "raw": 62,
+          "kept": 30
+        },
+        "24303": {
+          "raw": 72,
+          "kept": 31
+        },
+        "24304": {
+          "raw": 72,
+          "kept": 28
+        },
+        "24305": {
+          "raw": 69,
+          "kept": 25
+        },
+        "24306": {
+          "raw": 64,
+          "kept": 32
+        }
+      }
+    },
+    {
+      "model": "fixed_rule",
+      "policy": "cooldown_3m",
+      "raw_alert_rows": 389,
+      "review_rows": 210,
+      "suppressed_rows": 179,
+      "reduction_rate": 0.4601542416452442,
+      "positive_alert_rows": 42,
+      "retained_positive_rows": 22,
+      "suppressed_positive_rows": 20,
+      "consecutive_episodes": 196,
+      "positive_episodes": 22,
+      "positive_episodes_without_retained_positive": 0,
+      "monthly": {
+        "24301": {
+          "raw": 50,
+          "kept": 50
+        },
+        "24302": {
+          "raw": 62,
+          "kept": 30
+        },
+        "24303": {
+          "raw": 72,
+          "kept": 31
+        },
+        "24304": {
+          "raw": 72,
+          "kept": 31
+        },
+        "24305": {
+          "raw": 69,
+          "kept": 33
+        },
+        "24306": {
+          "raw": 64,
+          "kept": 35
+        }
+      }
+    }
+  ],
+  "validation_scope": "Build consistency only; not enterprise effectiveness or browser interaction validation"
+}
