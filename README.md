@@ -175,6 +175,7 @@ AutoQ-Guard/
 - [공개 저장소 구성 설명](docs/GITHUB_PUBLIC_RELEASE.md)
 - [핵심 소스코드 리뷰 가이드](docs/SOURCE_CODE_REVIEW_GUIDE.md)
 - [공개자료·기업자료 통합 설계](docs/PUBLIC_ENTERPRISE_INTEGRATION.md)
+- [격리 데이터·후보 DB·반영 차단 인수시험](docs/STAGING_PROMOTION_ACCEPTANCE.md)
 
 ## 프로젝트 상태
 

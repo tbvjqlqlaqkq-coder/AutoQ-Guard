@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from enterprise_dashboard import (
-    dashboard_summary, mapping_preview, save_approved_staging,
+    build_staged_candidate, compare_candidate, dashboard_summary, mapping_preview, promote_candidate, save_approved_staging,
     validate_staging_payload, validated_search,
 )
 from enterprise_pipeline import run_pipeline
@@ -86,6 +86,41 @@ class EnterpriseDashboardTests(unittest.TestCase):
             save_approved_staging(checked, "wrong-token", self.base / "staging")
         payload["rows"][0]["QTY"] = "10.5"
         self.assertEqual(validate_staging_payload(payload)["status"], "BLOCKED")
+
+    def test_five_approved_tables_build_isolated_candidate_database(self):
+        staging = self.base / "staging_bundle"
+        standardized = self.current / "01_import" / "standardized"
+        for number, table in enumerate(("part_lot.csv", "process_inspection.csv", "vehicle_build.csv", "warranty_claim.csv", "cost_master.csv"), 1):
+            folder = staging / f"token-{number}"
+            folder.mkdir(parents=True)
+            target = folder / table
+            shutil.copy2(standardized / table, target)
+            manifest = {"status":"STAGED_NOT_LOADED", "table":table, "approval_token":f"token-{number}",
+                        "rows":1, "staged_file":str(target)}
+            (folder / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        result = build_staged_candidate(staging, ROOT / "enterprise_data" / "enterprise_analysis_rules.json")
+        self.assertEqual(result["status"], "READY_CANDIDATE")
+        self.assertTrue(Path(result["candidate_database"]).exists())
+        self.assertNotEqual(Path(result["candidate_database"]), self.db)
+
+    def test_candidate_build_blocks_when_approved_table_is_missing(self):
+        with self.assertRaisesRegex(ValueError, "필수 테이블"):
+            build_staged_candidate(self.base / "empty_staging", ROOT / "enterprise_data" / "enterprise_analysis_rules.json")
+
+    def test_candidate_comparison_blocks_promotion_when_decision_gate_fails(self):
+        staging = self.base / "staging_review"
+        standardized = self.current / "01_import" / "standardized"
+        for number, table in enumerate(("part_lot.csv", "process_inspection.csv", "vehicle_build.csv", "warranty_claim.csv", "cost_master.csv"), 1):
+            folder = staging / f"token-{number}"; folder.mkdir(parents=True)
+            target = folder / table; shutil.copy2(standardized / table, target)
+            (folder / "manifest.json").write_text(json.dumps({"status":"STAGED_NOT_LOADED", "table":table,
+                "approval_token":f"token-{number}", "rows":1, "staged_file":str(target)}), encoding="utf-8")
+        built = build_staged_candidate(staging, ROOT / "enterprise_data" / "enterprise_analysis_rules.json")
+        compared = compare_candidate(self.db, staging, built["run_id"])
+        self.assertEqual(compared["status"], "REVIEW_ONLY")
+        self.assertFalse(compared["promotion_allowed"])
+        with self.assertRaisesRegex(ValueError, "표본 기준"):
+            promote_candidate(self.db, self.current / "pipeline_summary.json", staging, built["run_id"], compared["promotion_token"], "PROMOTE")
 
 
 if __name__ == "__main__":

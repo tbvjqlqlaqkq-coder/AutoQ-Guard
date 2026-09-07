@@ -7,6 +7,8 @@ import csv
 import hashlib
 import json
 import mimetypes
+import os
+import shutil
 import sqlite3
 import webbrowser
 from http.cookies import SimpleCookie
@@ -15,8 +17,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from enterprise_database import search_database
+from enterprise_database import build_database, search_database
 from enterprise_import import apply_transform
+from enterprise_risk_analyzer import analyze
 from enterprise_security import ROLE_PERMISSIONS, SecurityStore
 
 
@@ -132,6 +135,121 @@ def save_approved_staging(result: dict, supplied_token: str, staging_root: Path)
               "table":result["table"],"filename":result["filename"],"rows":result["checked_rows"],"staged_file":str(target)}
     (target_dir/"manifest.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8-sig")
     return manifest
+
+
+def build_staged_candidate(staging_root: Path, rules_file: Path) -> dict:
+    """각 테이블의 최신 승인본을 조립해 운영 DB와 분리된 후보 DB를 만든다."""
+    staging_root = staging_root.resolve()
+    selected: dict[str, tuple[Path, dict]] = {}
+    for manifest_file in staging_root.glob("*/manifest.json"):
+        manifest = json.loads(manifest_file.read_text(encoding="utf-8-sig"))
+        table = str(manifest.get("table", ""))
+        staged_file = Path(str(manifest.get("staged_file", "")))
+        if table not in MAPPING_SCHEMAS or manifest.get("status") != "STAGED_NOT_LOADED" or not staged_file.exists():
+            continue
+        previous = selected.get(table)
+        if previous is None or manifest_file.stat().st_mtime_ns > previous[0].stat().st_mtime_ns:
+            selected[table] = (manifest_file, manifest)
+    missing = sorted(set(MAPPING_SCHEMAS) - set(selected))
+    if missing:
+        raise ValueError("승인된 필수 테이블이 부족합니다: " + ", ".join(missing))
+    run_id = datetime.now().strftime("%Y%m%dT%H%M%S%f")
+    candidate = staging_root / "candidates" / run_id
+    inputs, analysis, database_dir = candidate / "01_input", candidate / "02_analysis", candidate / "03_database"
+    inputs.mkdir(parents=True)
+    sources = {}
+    for table, (_, manifest) in selected.items():
+        source = Path(manifest["staged_file"])
+        shutil.copy2(source, inputs / table)
+        sources[table] = {"approval_token": manifest["approval_token"], "rows": manifest["rows"]}
+    analyzed = analyze(inputs, analysis, rules_file.resolve())
+    if analyzed.get("status") != "READY":
+        raise ValueError("통합 위험분석이 차단됐습니다.")
+    database_dir.mkdir(parents=True)
+    built = build_database(inputs, analysis, database_dir / "automotive_quality.db", database_dir)
+    if built.get("status") != "READY":
+        raise ValueError("후보 데이터베이스 생성이 차단됐습니다.")
+    result = {"status":"READY_CANDIDATE", "run_id":run_id, "source_tables":sources,
+              "candidate_database":str(database_dir / "automotive_quality.db"),
+              "high_risk_lots":analyzed.get("high_risk_lots", 0),
+              "affected_vehicle_links":analyzed.get("affected_vehicle_links", 0),
+              "decision_gate_passed":analyzed.get("decision_gate_passed", False),
+              "notice":"후보 DB만 생성했습니다. 운영 DB 반영은 별도 최종 승인이 필요합니다."}
+    (candidate / "candidate_summary.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8-sig")
+    return result
+
+
+def _database_metrics(database: Path) -> dict:
+    if not database.exists():
+        raise FileNotFoundError(f"데이터베이스를 찾을 수 없습니다: {database}")
+    connection = sqlite3.connect(database)
+    try:
+        lot_count, high, watch, net = connection.execute("""
+            SELECT COUNT(*), SUM(CASE WHEN risk_level='HIGH' THEN 1 ELSE 0 END),
+                   SUM(CASE WHEN risk_level='WATCH' THEN 1 ELSE 0 END),
+                   COALESCE(SUM(estimated_net_benefit_krw),0) FROM lot_risk_result
+        """).fetchone()
+        affected = connection.execute("SELECT COUNT(*) FROM affected_vehicle").fetchone()[0]
+    finally:
+        connection.close()
+    return {"lot_count":lot_count, "high_risk_lots":high or 0, "watch_lots":watch or 0,
+            "affected_vehicle_links":affected, "estimated_net_benefit_krw":net or 0}
+
+
+def compare_candidate(database: Path, staging_root: Path, run_id: str = "") -> dict:
+    candidate_root = staging_root.resolve() / "candidates"
+    available = sorted((path for path in candidate_root.glob("*") if path.is_dir()), reverse=True)
+    candidate = next((path for path in available if not run_id or path.name == run_id), None)
+    if candidate is None:
+        raise ValueError("비교할 후보 DB를 찾을 수 없습니다.")
+    summary_file = candidate / "candidate_summary.json"
+    candidate_db = candidate / "03_database" / "automotive_quality.db"
+    summary = json.loads(summary_file.read_text(encoding="utf-8-sig"))
+    current, proposed = _database_metrics(database), _database_metrics(candidate_db)
+    digest = hashlib.sha256(candidate_db.read_bytes()).hexdigest()
+    token = hashlib.sha256(f"{candidate.name}:{digest}".encode("utf-8")).hexdigest()
+    deltas = {key: proposed[key] - current[key] for key in current}
+    allowed = bool(summary.get("decision_gate_passed"))
+    return {"status":"READY_TO_PROMOTE" if allowed else "REVIEW_ONLY", "run_id":candidate.name,
+            "current":current, "candidate":proposed, "delta":deltas, "promotion_token":token,
+            "promotion_allowed":allowed,
+            "notice":"표본 기준을 통과해 관리자 최종 승인이 가능합니다." if allowed else
+                     "표본 기준 미달이므로 비교만 가능하며 운영 반영은 차단됩니다."}
+
+
+def promote_candidate(database: Path, pipeline_summary: Path, staging_root: Path, run_id: str,
+                      supplied_token: str, confirmation: str) -> dict:
+    comparison = compare_candidate(database, staging_root, run_id)
+    if not comparison["promotion_allowed"]:
+        raise ValueError("후보 데이터가 표본 기준을 통과하지 못해 운영 반영할 수 없습니다.")
+    if supplied_token != comparison["promotion_token"] or confirmation != "PROMOTE":
+        raise ValueError("최종 승인 문구 또는 후보 승인번호가 일치하지 않습니다.")
+    candidate = staging_root.resolve() / "candidates" / run_id
+    candidate_db = candidate / "03_database" / "automotive_quality.db"
+    candidate_analysis = json.loads((candidate / "02_analysis" / "enterprise_analysis_summary.json").read_text(encoding="utf-8-sig"))
+    backup = staging_root.resolve() / "deployments" / run_id
+    backup.mkdir(parents=True, exist_ok=False)
+    database.parent.mkdir(parents=True, exist_ok=True)
+    if database.exists(): shutil.copy2(database, backup / "previous_automotive_quality.db")
+    if pipeline_summary.exists(): shutil.copy2(pipeline_summary, backup / "previous_pipeline_summary.json")
+    next_db, next_summary = database.with_suffix(".next.db"), pipeline_summary.with_suffix(".next.json")
+    deployed_summary = {"status":"READY", "run_id":run_id, "decision_gate_passed":True,
+                        "decision_notice":"후보 비교 및 관리자 최종 승인 완료", "source":"APPROVED_STAGING",
+                        "analysis":candidate_analysis, "promoted_at":datetime.now().isoformat()}
+    try:
+        shutil.copy2(candidate_db, next_db)
+        next_summary.write_text(json.dumps(deployed_summary, ensure_ascii=False, indent=2), encoding="utf-8-sig")
+        os.replace(next_db, database)
+        os.replace(next_summary, pipeline_summary)
+    except Exception:
+        next_db.unlink(missing_ok=True); next_summary.unlink(missing_ok=True)
+        if (backup / "previous_automotive_quality.db").exists(): shutil.copy2(backup / "previous_automotive_quality.db", database)
+        if (backup / "previous_pipeline_summary.json").exists(): shutil.copy2(backup / "previous_pipeline_summary.json", pipeline_summary)
+        raise
+    receipt = {"status":"PROMOTED", "run_id":run_id, "backup_dir":str(backup),
+               "promoted_at":deployed_summary["promoted_at"], "metrics":comparison["candidate"]}
+    (backup / "promotion_receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2), encoding="utf-8-sig")
+    return receipt
 
 
 def dashboard_summary(database: Path, pipeline_summary: Path) -> dict:
@@ -310,10 +428,10 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
                     if not user: return
                     if security: security.logout(self.cookie_token(), self.client_address[0])
                     body=b'{"status":"READY"}'; self.send_response(200); self.send_header("Content-Type","application/json"); self.send_header("Content-Length",str(len(body))); self.send_header("Set-Cookie","autoq_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0"); self.end_headers(); self.wfile.write(body); return
-                if endpoint not in {"/api/mapping-preview", "/api/staging-preview", "/api/staging-approve", "/api/admin/users", "/api/admin/user-status"}:
+                if endpoint not in {"/api/mapping-preview", "/api/staging-preview", "/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote", "/api/admin/users", "/api/admin/user-status"}:
                     self.send_json(404, {"status": "ERROR", "message": "요청한 기능을 찾을 수 없습니다."})
                     return
-                permission = "MANAGE_USERS" if endpoint.startswith("/api/admin/") else "IMPORT_APPROVE" if endpoint == "/api/staging-approve" else "IMPORT_PREVIEW"
+                permission = "MANAGE_USERS" if endpoint.startswith("/api/admin/") else "IMPORT_APPROVE" if endpoint in {"/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote"} else "IMPORT_PREVIEW"
                 user = self.require(permission, csrf=True)
                 if not user: return
                 content_type = self.headers.get("Content-Type", "")
@@ -329,9 +447,20 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
                     result = {"status":"READY","users":security.list_users()}
                 elif endpoint == "/api/mapping-preview":
                     result = mapping_preview(str(payload.get("table", "")), payload.get("headers", []), str(payload.get("filename", "")))
+                elif endpoint == "/api/staging-run":
+                    result = build_staged_candidate(staging_root, Path(__file__).resolve().parents[1] / "enterprise_data" / "enterprise_analysis_rules.json")
+                elif endpoint == "/api/staging-compare":
+                    result = compare_candidate(database, staging_root, str(payload.get("run_id", "")))
+                elif endpoint == "/api/staging-promote":
+                    result = promote_candidate(database, pipeline_summary, staging_root, str(payload.get("run_id", "")),
+                                               str(payload.get("promotion_token", "")), str(payload.get("confirmation", "")))
                 else:
                     checked = validate_staging_payload(payload)
                     result = save_approved_staging(checked, str(payload.get("approval_token", "")), staging_root) if endpoint == "/api/staging-approve" else {key:value for key,value in checked.items() if key != "standardized_rows"}
+                if security and endpoint in {"/api/mapping-preview", "/api/staging-preview", "/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote"}:
+                    security.audit(user["username"], endpoint.removeprefix("/api/").upper().replace("-", "_"),
+                                   "SUCCESS", self.client_address[0], {"table":str(payload.get("table", "")),
+                                   "filename":str(payload.get("filename", ""))[:200], "status":result.get("status")})
                 self.send_json(200, result)
             except (ValueError, json.JSONDecodeError) as exc:
                 self.send_json(400, {"status": "BLOCKED", "message": str(exc)})
