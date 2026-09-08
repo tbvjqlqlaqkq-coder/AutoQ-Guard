@@ -1,5 +1,26 @@
 # AutoQ-Guard
 
+## 선택형 제조 프로필 · n8n 연동
+
+기존 자동차 품질 분석은 기본값으로 유지하면서 대시보드에서 `자동차 제조`,
+`의료기기 제조`, `일반 제조` 시연 프로필을 선택할 수 있습니다. 프로필은 표시 용어와
+외부 데이터 매핑만 전환하며 위험분석·후보 DB·운영 반영 차단 로직은 변경하지 않습니다.
+
+n8n 연동도 기본적으로 꺼져 있습니다. `.env`의 `AUTOQ_N8N_INTEGRATION=true` 설정 때만
+선택형 자동화 계층으로 표시되며, 예제 워크플로는 비활성 상태로 제공됩니다.
+자세한 설명은 [선택형 제조 프로필과 n8n 연동](docs/OPTIONAL_N8N_PROFILES.md)을 참고하세요.
+
+로컬 면접 시연은 다음 순서로 재현할 수 있습니다. n8n 런타임과 데이터는 Git에
+포함되지 않는 `.runtime` 아래에만 저장됩니다.
+
+```powershell
+.\scripts\setup_n8n_demo.ps1
+$env:AUTOQ_INTEGRATION_TOKEN = "면접-시연용-임의-토큰"
+.\scripts\start_n8n_demo.ps1
+.\scripts\send_medical_demo_event.ps1
+.\scripts\stop_n8n_demo.ps1
+```
+
 ### 자동차 부품 LOT부터 VIN·보증수리·리콜 위험까지 연결하는 품질 조기대응 PoC
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)

@@ -21,6 +21,8 @@ from enterprise_database import build_database, search_database
 from enterprise_import import apply_transform
 from enterprise_risk_analyzer import analyze
 from enterprise_security import ROLE_PERMISSIONS, SecurityStore
+from manufacturing_profiles import profile_catalog
+from n8n_integration import assess_quality_event, integration_enabled, integration_status, save_last_event, validate_token
 
 
 ALLOWED_FILTERS = {"lot_id", "vin", "supplier_id", "part_number", "risk_level"}
@@ -324,12 +326,14 @@ def model_validation_summary(result_file: Path) -> dict:
 
 
 def make_handler(database: Path, pipeline_summary: Path, model_result: Path | None = None, ui_file: Path | None = None,
-                 staging_root: Path | None = None, security: SecurityStore | None = None):
+                  staging_root: Path | None = None, security: SecurityStore | None = None):
     # 이전 성능시험 호출 형식(database, summary, ui)을 계속 지원합니다.
     if ui_file is None and model_result is not None and model_result.suffix.lower() == ".html":
         ui_file, model_result = model_result, Path("__missing_model_result__.json")
     model_result = model_result or Path("__missing_model_result__.json")
     staging_root = staging_root or database.parent / "import_staging"
+    integration_status_file = staging_root / "n8n_last_event.json"
+    integration_runtime = {"enabled": integration_enabled()}
     class Handler(BaseHTTPRequestHandler):
         def cookie_token(self) -> str | None:
             cookie = SimpleCookie(); cookie.load(self.headers.get("Cookie", ""))
@@ -375,6 +379,12 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
                 elif request.path == "/api/summary":
                     if not self.require("VIEW_DASHBOARD"): return
                     self.send_json(200, {"status": "READY", "data": dashboard_summary(database, pipeline_summary)})
+                elif request.path == "/api/profiles":
+                    if not self.require("VIEW_DASHBOARD"): return
+                    self.send_json(200, profile_catalog(n8n_enabled=integration_runtime["enabled"]))
+                elif request.path == "/api/integration/status":
+                    if not self.require("VIEW_DASHBOARD"): return
+                    self.send_json(200, integration_status(integration_status_file, integration_runtime["enabled"]))
                 elif request.path == "/api/search":
                     user = self.require("SEARCH")
                     if not user: return
@@ -428,10 +438,21 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
                     if not user: return
                     if security: security.logout(self.cookie_token(), self.client_address[0])
                     body=b'{"status":"READY"}'; self.send_response(200); self.send_header("Content-Type","application/json"); self.send_header("Content-Length",str(len(body))); self.send_header("Set-Cookie","autoq_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0"); self.end_headers(); self.wfile.write(body); return
-                if endpoint not in {"/api/mapping-preview", "/api/staging-preview", "/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote", "/api/admin/users", "/api/admin/user-status"}:
+                if endpoint == "/api/integration/quality-event":
+                    if not integration_runtime["enabled"]:
+                        self.send_json(503, {"status":"DISABLED","message":"n8n 선택 연동이 꺼져 있습니다."}); return
+                    if not validate_token(self.headers.get("X-AutoQ-Integration-Token", "")):
+                        self.send_json(401, {"status":"DENIED","message":"연동 인증정보가 올바르지 않습니다."}); return
+                    length = int(self.headers.get("Content-Length", "0"))
+                    if "application/json" not in self.headers.get("Content-Type", "") or length <= 0 or length > 65536:
+                        raise ValueError("품질 이벤트 JSON 형식 또는 크기가 올바르지 않습니다.")
+                    result = assess_quality_event(json.loads(self.rfile.read(length).decode("utf-8")))
+                    save_last_event(result, integration_status_file)
+                    self.send_json(200, result); return
+                if endpoint not in {"/api/mapping-preview", "/api/staging-preview", "/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote", "/api/integration/control", "/api/admin/users", "/api/admin/user-status"}:
                     self.send_json(404, {"status": "ERROR", "message": "요청한 기능을 찾을 수 없습니다."})
                     return
-                permission = "MANAGE_USERS" if endpoint.startswith("/api/admin/") else "IMPORT_APPROVE" if endpoint in {"/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote"} else "IMPORT_PREVIEW"
+                permission = "MANAGE_USERS" if endpoint.startswith("/api/admin/") or endpoint == "/api/integration/control" else "IMPORT_APPROVE" if endpoint in {"/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote"} else "IMPORT_PREVIEW"
                 user = self.require(permission, csrf=True)
                 if not user: return
                 content_type = self.headers.get("Content-Type", "")
@@ -445,6 +466,15 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
                 elif endpoint == "/api/admin/user-status":
                     security.set_active(str(payload.get("username", "")), bool(payload.get("active")), user["username"])
                     result = {"status":"READY","users":security.list_users()}
+                elif endpoint == "/api/integration/control":
+                    action = str(payload.get("action", "")).upper()
+                    if action not in {"START", "STOP"}:
+                        raise ValueError("연동 제어는 START 또는 STOP만 허용됩니다.")
+                    integration_runtime["enabled"] = action == "START"
+                    result = integration_status(integration_status_file, integration_runtime["enabled"])
+                    result["action"] = action
+                    if security:
+                        security.audit(user["username"], "N8N_INTEGRATION_CONTROL", "SUCCESS", self.client_address[0], {"action":action})
                 elif endpoint == "/api/mapping-preview":
                     result = mapping_preview(str(payload.get("table", "")), payload.get("headers", []), str(payload.get("filename", "")))
                 elif endpoint == "/api/staging-run":

@@ -1,0 +1,10 @@
+{
+  "profile": "medical_device",
+  "lot_id": "PU-TUBE-202609-01",
+  "process_id": "LEAK-TEST",
+  "process_z": 3.4,
+  "recheck_rate": 0.12,
+  "claim_count": 1,
+  "affected_count": 40,
+  "unit_loss_krw": 85000
+}

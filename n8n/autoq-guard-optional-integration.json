@@ -1,0 +1,96 @@
+{
+  "id": "autoqGuardMesErpDemo",
+  "name": "AutoQ-Guard Optional MES-ERP Integration",
+  "nodes": [
+    {
+      "parameters": {"httpMethod": "POST", "path": "autoq-quality-event", "responseMode": "responseNode", "options": {}},
+      "id": "webhook",
+      "webhookId": "d4afbe77-b223-4a65-bf8f-0e2c00c8f6f1",
+      "name": "MES Quality Event",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-620, 0]
+    },
+    {
+      "parameters": {
+        "assignments": {"assignments": [
+          {"id": "profile", "name": "profile", "value": "={{ ['automotive','medical_device','general_manufacturing'].includes($json.body?.profile) ? $json.body.profile : 'general_manufacturing' }}", "type": "string"},
+          {"id": "lot", "name": "lot_id", "value": "={{ $json.body?.lot_id }}", "type": "string"},
+          {"id": "process", "name": "process_id", "value": "={{ $json.body?.process_id }}", "type": "string"},
+          {"id": "score", "name": "process_z", "value": "={{ Number($json.body?.process_z || 0) }}", "type": "number"},
+          {"id": "rate", "name": "recheck_rate", "value": "={{ Number($json.body?.recheck_rate || 0) }}", "type": "number"},
+          {"id": "claims", "name": "claim_count", "value": "={{ Number($json.body?.claim_count || 0) }}", "type": "number"},
+          {"id": "affected", "name": "affected_count", "value": "={{ Number($json.body?.affected_count || 0) }}", "type": "number"},
+          {"id": "loss", "name": "unit_loss_krw", "value": "={{ Number($json.body?.unit_loss_krw || 0) }}", "type": "number"}
+        ]},
+        "options": {}
+      },
+      "id": "normalize",
+      "name": "Normalize MES Event",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-380, 0]
+    },
+    {
+      "parameters": {"conditions": {"options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"}, "conditions": [{"id": "required-lot", "leftValue": "={{ $json.lot_id }}", "rightValue": "", "operator": {"type": "string", "operation": "notEmpty", "singleValue": true}}], "combinator": "and"}, "options": {}},
+      "id": "validate",
+      "name": "Required LOT Present",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-140, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8880/api/integration/quality-event",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-AutoQ-Integration-Token",
+              "value": "={{ $env.AUTOQ_INTEGRATION_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "autoq-api",
+      "name": "AutoQ Risk Preview API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [100, -80]
+    },
+    {
+      "parameters": {"respondWith": "json", "responseBody": "={{ $json }}", "options": {}},
+      "id": "accepted",
+      "name": "Accepted Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [340, -80]
+    },
+    {
+      "parameters": {"respondWith": "json", "responseBody": "={{ { status: 'BLOCKED', message: 'lot_id is required' } }}", "options": {"responseCode": 400}},
+      "id": "blocked",
+      "name": "Blocked Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [100, 100]
+    }
+  ],
+  "connections": {
+    "MES Quality Event": {"main": [[{"node": "Normalize MES Event", "type": "main", "index": 0}]]},
+    "Normalize MES Event": {"main": [[{"node": "Required LOT Present", "type": "main", "index": 0}]]},
+    "Required LOT Present": {"main": [[{"node": "AutoQ Risk Preview API", "type": "main", "index": 0}], [{"node": "Blocked Response", "type": "main", "index": 0}]]},
+    "AutoQ Risk Preview API": {"main": [[{"node": "Accepted Response", "type": "main", "index": 0}]]}
+  },
+  "pinData": {},
+  "settings": {"executionOrder": "v1"},
+  "active": false,
+  "versionId": "6f74db88-5802-4bb6-838b-bac5f106b7bf",
+  "meta": {"templateCredsSetupCompleted": false},
+  "tags": []
+}
