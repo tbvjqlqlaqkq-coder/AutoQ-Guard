@@ -39,6 +39,8 @@ $env:AUTOQ_INTEGRATION_TOKEN = "면접-시연용-임의-토큰"
 
 현업 검토용: [무엇을 확인했고 어떤 피드백이 필요한지](docs/EXTERNAL_REVIEW_GUIDE.md)
 
+기업 실증 준비: [데이터 요청·보안·검증·Go/No-Go 계획](docs/ENTERPRISE_PILOT_PLAN.md) · [데이터 요청표](enterprise_data/ENTERPRISE_DATA_REQUEST.csv)
+
 배포 정책: [자동검사 통과 후 GitHub Pages 배포 구조와 활성화 조건](docs/model_validation/GATED_DEPLOYMENT.md)
 
 | 무엇을 만들었나 | 확인한 결과 | 아직 확정할 수 없는 것 |

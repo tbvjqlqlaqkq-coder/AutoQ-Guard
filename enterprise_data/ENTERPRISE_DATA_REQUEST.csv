@@ -1,0 +1,7 @@
+dataset,required,minimum_fields,optional_fields,proposed_period,privacy_rule,purpose,owner
+part_lot,Y,lot_id|supplier_id|part_number|received_at,plant_code|line_code|equipment_code|quantity,12개월 이상,협력사명은 내부 코드 치환 가능,공급·생산 LOT 추적,구매·품질
+process_inspection,Y,inspection_id|lot_id|inspected_at|deviation_score|reinspection_rate,measurement_name|spec_min|spec_max|measured_value|equipment_code,12개월 이상,작업자 이름·사번 제외,공정 이상신호 생성,생산기술·품질
+vehicle_build,Y,vehicle_key|lot_id|built_at,model_code|model_year|line_code,12개월 이상,VIN 대신 기업 내부 HMAC vehicle_key 권장,LOT 장착 차량 추적,생산·품질
+warranty_claim,Y,claim_id|vehicle_key|claim_date|failure_code|repair_cost_krw,dtc|failed_part_number|mileage|repair_type,생산분의 관찰기간 포함,고객 이름·전화·주소 제외,결함 결과와 비용 연결,보증·서비스
+cost_master,Y,part_number|pre_ship_action_cost_krw|post_ship_repair_cost_krw,labor_cost_krw|logistics_cost_krw|inventory_cost_krw|customer_compensation_krw,적용 회계연도,협력사 계약단가 접근권한 제한,기업 기준 손익·ROI 계산,재무·품질
+public_part_mapping,Y,model_code|model_year|part_number|public_component_code|valid_from|approved_by,valid_to|mapping_version,유효기간별,개인정보 없음·승인자 식별자는 내부 보관,공개 신호와 내부 부품계통의 승인된 연결,품질 책임자
