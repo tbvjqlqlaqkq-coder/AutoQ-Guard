@@ -35,7 +35,7 @@ $env:AUTOQ_INTEGRATION_TOKEN = "면접-시연용-임의-토큰"
 
 ## 프로젝트를 30초 안에 보기
 
-최근 추가: [공개 경보 검토 화면](https://tbvjqlqlaqkq-coder.github.io/AutoQ-Guard/demo/alert-review.html) · [화면 동작 검증 기록](docs/model_validation/BROWSER_ACCEPTANCE.md) · [비용 가정 분석](docs/model_validation/COST_SENSITIVITY.md). 경보 원본을 보존하며 실제 리콜 예방·기업 ROI를 확정하지 않습니다.
+최근 추가: [기업 파일럿 계획](docs/ENTERPRISE_PILOT_PLAN.md) · [기업 규모 합성데이터 드라이런](docs/ENTERPRISE_PILOT_DRY_RUN.md) · [잡음·경계조건 강건성 시험](docs/SYNTHETIC_ROBUSTNESS_TEST.md). 경보 원본을 보존하며 실제 리콜 예방·기업 ROI를 확정하지 않습니다.
 
 현업 검토용: [무엇을 확인했고 어떤 피드백이 필요한지](docs/EXTERNAL_REVIEW_GUIDE.md)
 
@@ -190,6 +190,11 @@ AutoQ-Guard/
 ```
 
 ## 더 자세히 보기
+
+- [기업 파일럿 실증 계획](docs/ENTERPRISE_PILOT_PLAN.md)
+- [기업 규모 합성데이터 드라이런](docs/ENTERPRISE_PILOT_DRY_RUN.md)
+- [합성 잡음·경계조건 강건성 시험](docs/SYNTHETIC_ROBUSTNESS_TEST.md)
+- [기업 데이터 요청표](enterprise_data/ENTERPRISE_DATA_REQUEST.csv)
 
 - [최종 프로젝트 검증 보고서](docs/FINAL_REPORT.md)
 - [기업 적용 한계와 남은 과제](docs/LIMITATIONS_AND_ENTERPRISE.md)
