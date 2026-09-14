@@ -196,6 +196,7 @@ AutoQ-Guard/
 - [합성 잡음·경계조건 강건성 시험](docs/SYNTHETIC_ROBUSTNESS_TEST.md)
 - [임계값·비용 민감도 시험](docs/THRESHOLD_COST_TRADEOFF.md)
 - [안전등급별 경보 정책 비교](docs/SAFETY_CLASS_POLICY.md)
+- [안전등급 계층화 독립 검증](docs/STRATIFIED_SAFETY_VALIDATION.md)
 - [기업 데이터 요청표](enterprise_data/ENTERPRISE_DATA_REQUEST.csv)
 
 - [최종 프로젝트 검증 보고서](docs/FINAL_REPORT.md)
