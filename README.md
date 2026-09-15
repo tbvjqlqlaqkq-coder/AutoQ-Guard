@@ -200,6 +200,7 @@ AutoQ-Guard/
 - [안전부품 임계값 한계 분석](docs/SAFETY_THRESHOLD_FRONTIER.md)
 - [경계점수 LOT 2차 증거 검증](docs/SECONDARY_EVIDENCE_VALIDATION.md)
 - [WATCH LOT 검사 우선순위](docs/WATCH_REVIEW_QUEUE.md)
+- [WATCH LOT 조사·승인 업무 흐름](docs/QUALITY_CASE_WORKFLOW.md)
 - [기업 데이터 요청표](enterprise_data/ENTERPRISE_DATA_REQUEST.csv)
 
 - [최종 프로젝트 검증 보고서](docs/FINAL_REPORT.md)
