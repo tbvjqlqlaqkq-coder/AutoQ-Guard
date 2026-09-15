@@ -23,6 +23,7 @@ from enterprise_risk_analyzer import analyze
 from enterprise_security import ROLE_PERMISSIONS, SecurityStore
 from manufacturing_profiles import profile_catalog
 from n8n_integration import assess_quality_event, integration_enabled, integration_status, save_last_event, validate_token
+from quality_case_workflow import QualityCaseWorkflow
 
 
 ALLOWED_FILTERS = {"lot_id", "vin", "supplier_id", "part_number", "risk_level"}
@@ -334,6 +335,7 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
     staging_root = staging_root or database.parent / "import_staging"
     integration_status_file = staging_root / "n8n_last_event.json"
     integration_runtime = {"enabled": integration_enabled()}
+    quality_workflow = QualityCaseWorkflow(staging_root.parent / "quality_cases.db")
     class Handler(BaseHTTPRequestHandler):
         def cookie_token(self) -> str | None:
             cookie = SimpleCookie(); cookie.load(self.headers.get("Cookie", ""))
@@ -394,6 +396,13 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
                 elif request.path == "/api/model-validation":
                     if not self.require("VIEW_DASHBOARD"): return
                     self.send_json(200, model_validation_summary(model_result))
+                elif request.path == "/api/quality/cases":
+                    if not self.require("VIEW_DASHBOARD"): return
+                    self.send_json(200,{"status":"READY","cases":quality_workflow.list_cases()})
+                elif request.path == "/api/quality/case":
+                    if not self.require("VIEW_DASHBOARD"): return
+                    values=parse_qs(request.query);case_id=int(values.get("id",["0"])[0])
+                    self.send_json(200,{"status":"READY",**quality_workflow.case(case_id)})
                 elif request.path == "/api/admin/users":
                     if not self.require("MANAGE_USERS"): return
                     self.send_json(200, {"status":"READY","users":security.list_users() if security else []})
@@ -449,10 +458,10 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
                     result = assess_quality_event(json.loads(self.rfile.read(length).decode("utf-8")))
                     save_last_event(result, integration_status_file)
                     self.send_json(200, result); return
-                if endpoint not in {"/api/mapping-preview", "/api/staging-preview", "/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote", "/api/integration/control", "/api/admin/users", "/api/admin/user-status"}:
+                if endpoint not in {"/api/mapping-preview", "/api/staging-preview", "/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote", "/api/integration/control", "/api/admin/users", "/api/admin/user-status", "/api/quality/cases", "/api/quality/transition"}:
                     self.send_json(404, {"status": "ERROR", "message": "요청한 기능을 찾을 수 없습니다."})
                     return
-                permission = "MANAGE_USERS" if endpoint.startswith("/api/admin/") or endpoint == "/api/integration/control" else "IMPORT_APPROVE" if endpoint in {"/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote"} else "IMPORT_PREVIEW"
+                permission = "MANAGE_QUALITY_CASES" if endpoint.startswith("/api/quality/") else "MANAGE_USERS" if endpoint.startswith("/api/admin/") or endpoint == "/api/integration/control" else "IMPORT_APPROVE" if endpoint in {"/api/staging-approve", "/api/staging-run", "/api/staging-compare", "/api/staging-promote"} else "IMPORT_PREVIEW"
                 user = self.require(permission, csrf=True)
                 if not user: return
                 content_type = self.headers.get("Content-Type", "")
@@ -460,7 +469,12 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
                 if "application/json" not in content_type or length <= 0 or length > 5242880:
                     raise ValueError("매핑 요청 형식 또는 크기가 올바르지 않습니다.")
                 payload = json.loads(self.rfile.read(length).decode("utf-8"))
-                if endpoint == "/api/admin/users":
+                if endpoint == "/api/quality/cases":
+                    case_id=quality_workflow.open_case(str(payload.get("lot_id","")),str(payload.get("safety_class","")),user["username"],user["role"],str(payload.get("reason","")))
+                    result={"status":"READY",**quality_workflow.case(case_id)}
+                elif endpoint == "/api/quality/transition":
+                    result={"status":"READY",**quality_workflow.transition(int(payload.get("case_id",0)),str(payload.get("to_status","")),user["username"],user["role"],str(payload.get("reason","")),str(payload.get("evidence_ref","")))}
+                elif endpoint == "/api/admin/users":
                     security.create_user(str(payload.get("username", "")), str(payload.get("display_name", "")), str(payload.get("password", "")), str(payload.get("role", "")), user["username"])
                     result = {"status":"READY","users":security.list_users()}
                 elif endpoint == "/api/admin/user-status":
@@ -492,6 +506,10 @@ def make_handler(database: Path, pipeline_summary: Path, model_result: Path | No
                                    "SUCCESS", self.client_address[0], {"table":str(payload.get("table", "")),
                                    "filename":str(payload.get("filename", ""))[:200], "status":result.get("status")})
                 self.send_json(200, result)
+            except PermissionError as exc:
+                self.send_json(403,{"status":"FORBIDDEN","message":str(exc)})
+            except KeyError as exc:
+                self.send_json(404,{"status":"NOT_FOUND","message":str(exc)})
             except (ValueError, json.JSONDecodeError) as exc:
                 self.send_json(400, {"status": "BLOCKED", "message": str(exc)})
             except Exception:

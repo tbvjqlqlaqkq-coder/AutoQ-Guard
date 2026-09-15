@@ -72,6 +72,9 @@ class QualityCaseWorkflow:
             case=db.execute("SELECT * FROM quality_case WHERE case_id=?",(case_id,)).fetchone();events=db.execute("SELECT * FROM quality_case_event WHERE case_id=? ORDER BY event_id",(case_id,)).fetchall()
             if not case:raise KeyError("사건을 찾을 수 없습니다")
             return {"case":dict(case),"events":[dict(r) for r in events],"automatic_recall":False}
+    def list_cases(self,limit:int=100)->list[dict]:
+        with self._db() as db:
+            return [dict(row) for row in db.execute("SELECT * FROM quality_case ORDER BY updated_at DESC,case_id DESC LIMIT ?",(min(max(limit,1),500),))]
     def verify_chain(self,case_id:int)->bool:
         data=self.case(case_id);previous=""
         for event in data["events"]:
